@@ -27,6 +27,8 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='gymconfig',
             name='weeks_inactive',
-            field=models.PositiveIntegerField(help_text='Number of weeks since the last time a user logged his presence to be considered inactive', default=4, verbose_name='Reminder inactive members'),
+            field=models.PositiveIntegerField(help_text='Number of weeks since the last time a user logged his presence'
+                                                        'to be considered inactive',
+                                              default=4, verbose_name='Reminder inactive members'),
         ),
     ]

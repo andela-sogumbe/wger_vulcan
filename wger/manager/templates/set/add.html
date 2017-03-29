@@ -8,7 +8,9 @@
         Title
 -->
 
-{% block title %}{% with day_name=day.description %}{% blocktrans %}Add exercises to day "{{day_name}}"{% endblocktrans %}{% endwith %}{% endblock %}
+{% block title %}
+{% with day_name=day.description %}{% blocktrans %}Add exercises to day "{{day_name}}"{% endblocktrans %}{% endwith %}
+{% endblock %}
 
 
 <!--
