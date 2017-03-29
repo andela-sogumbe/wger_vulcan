@@ -60,7 +60,7 @@ script:
   - gulp lint
 
   # Regular application
-  - coverage run --source='.' ./manage.py test --parallel=4
+  - coverage run --source='.' ./manage.py test --parallel
 
 
   # Code coverage
