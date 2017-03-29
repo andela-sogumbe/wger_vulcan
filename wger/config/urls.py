@@ -23,15 +23,15 @@ from wger.config.views import gym_config
 
 # sub patterns for language configs
 patterns_language_config = [
-    url(r'^(?P<pk>\d+)/edit',
-        language_config.LanguageConfigUpdateView.as_view(),
-        name='edit'),
+   url(r'^(?P<pk>\d+)/edit',
+       language_config.LanguageConfigUpdateView.as_view(),
+       name='edit'),
 ]
 
 
 # sub patterns for default gym
 patterns_gym_config = [
-    url(r'^edit$',
+   url(r'^edit$',
        gym_config.GymConfigUpdateView.as_view(),
        name='edit'),
 ]
