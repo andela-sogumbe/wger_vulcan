@@ -32,8 +32,8 @@ patterns_language_config = [
 # sub patterns for default gym
 patterns_gym_config = [
     url(r'^edit$',
-        gym_config.GymConfigUpdateView.as_view(),
-        name='edit'),
+       gym_config.GymConfigUpdateView.as_view(),
+       name='edit'),
 ]
 
 
