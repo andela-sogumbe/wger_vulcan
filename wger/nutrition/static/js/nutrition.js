@@ -128,7 +128,7 @@ function wgerRenderBodyMassIndex(w) {
 
   heightFactor = (widthFactor / 600) * 300;
 
-  margin = {top: 20, right: 80, bottom: 30, left: 50};
+  margin = { top: 20, right: 80, bottom: 30, left: 50 };
   width = widthFactor - margin.left - margin.right;
   height = heightFactor - margin.top - margin.bottom;
 
@@ -275,7 +275,7 @@ function wgerInitCaloriesCalculator() {
       $.ajax({
         url: '/api/v2/userprofile/' + userprofile.results[0].id + '/',
         type: 'PATCH',
-        data: {calories: totalCalories}
+        data: { calories: totalCalories }
       });
     });
   });

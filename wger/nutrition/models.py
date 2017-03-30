@@ -50,8 +50,8 @@ ENERGY_FACTOR = {'protein': {'kg': 4,
                                    'lb': 113},
                  'fat': {'kg': 9,
                          'lb': 225}}
-""" 
-Simple approximation of energy (kcal) provided per gram or ounce 
+"""
+Simple approximation of energy (kcal) provided per gram or ounce
 """
 
 
@@ -644,8 +644,8 @@ class MealItem(models.Model):
         nutritional_info['carbohydrates'] += self.ingredient.carbohydrates * item_weight / 100
 
         if self.ingredient.carbohydrates_sugar:
-            nutritional_info['carbohydrates_sugar'] += self.ingredient.carbohydrates_sugar \
-                                                       * item_weight / 100
+            nutritional_info['carbohydrates_sugar'] += self.ingredient.carbohydrates_sugar\
+                * item_weight / 100
 
         nutritional_info['fat'] += self.ingredient.fat * item_weight / 100
 
