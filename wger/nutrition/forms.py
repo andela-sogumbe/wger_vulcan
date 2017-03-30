@@ -27,14 +27,13 @@ from wger.nutrition.models import (
 )
 from wger.utils.widgets import Html5NumberInput
 
-
 logger = logging.getLogger(__name__)
 
 
 class UnitChooserForm(forms.Form):
-    '''
+    """
     A small form to select an amount and a unit for an ingredient
-    '''
+    """
     amount = forms.DecimalField(decimal_places=2,
                                 max_digits=5,
                                 localize=True)
@@ -67,13 +66,13 @@ class BmiForm(forms.ModelForm):
 
     class Meta:
         model = UserProfile
-        fields = ('height', )
+        fields = ('height',)
 
 
 class BmrForm(forms.ModelForm):
-    '''
+    """
     Form for the basal metabolic rate
-    '''
+    """
     weight = forms.DecimalField(widget=Html5NumberInput())
 
     class Meta:
@@ -82,9 +81,10 @@ class BmrForm(forms.ModelForm):
 
 
 class PhysicalActivitiesForm(forms.ModelForm):
-    '''
+    """
     Form for the additional physical activities
-    '''
+    """
+
     class Meta:
         model = UserProfile
         fields = ('sleep_hours',
@@ -97,9 +97,9 @@ class PhysicalActivitiesForm(forms.ModelForm):
 
 
 class DailyCaloriesForm(forms.ModelForm):
-    '''
+    """
     Form for the total daily calories needed
-    '''
+    """
 
     base_calories = forms.IntegerField(label=_('Basic caloric intake'),
                                        help_text=_('Your basic caloric intake as calculated for '
