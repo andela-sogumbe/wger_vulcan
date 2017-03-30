@@ -9,7 +9,8 @@
     <meta property="og:title" content="{% trans 'Workout log' %}">
 
     {% with username=owner_user.username %}
-        <meta property="og:description" content="{% blocktrans %}Workout log for {{username}} for {{date}}{% endblocktrans %}">
+        <meta property="og:description"
+              content="{% blocktrans %}Workout log for {{username}} for {{date}}{% endblocktrans %}">
     {% endwith %}
 {% endblock %}
 
