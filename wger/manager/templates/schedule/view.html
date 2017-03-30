@@ -85,7 +85,9 @@
         <td>
             {% if schedule.is_loop %}
                 <span class="{% fa_class 'check' %}"></span>
-                <small>{% trans "This schedule is a loop and will go through the workouts above till you deactivate it" %}</small>
+                <small>
+                    {% trans "This schedule is a loop and will go through the workouts above till you deactivate it" %}
+                </small>
             {% else %}
                 <span class="{% fa_class 'times' %}"></span>
             {% endif %}
@@ -258,7 +260,8 @@ an appointment for each training day with the appropriate exercises.{% endblockt
             </div>
             <div class="modal-body">
                 <form class="form-horizontal">
-                    <div id="pdf-download-info" data-schedule-id="{{ schedule.id }}" data-uid="{{ uid }}" data-token="{{ token }}"></div>
+                    <div id="pdf-download-info" data-schedule-id="{{ schedule.id }}" data-uid="{{ uid }}"
+                         data-token="{{ token }}"></div>
                     <div class="form-group">
                         <div>
                             <label for="id_images" class="col-md-3 control-label">
@@ -317,7 +320,8 @@ an appointment for each training day with the appropriate exercises.{% endblockt
 {#         #}
 {% block options %}
     <div class="btn-group">
-    <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+            aria-expanded="false">
         <span class="{% fa_class 'cog' %}"></span>
         {% trans "Options" %}
     </button>
