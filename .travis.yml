@@ -15,6 +15,8 @@ sudo: false
 # Python versions to test
 python:
   - "2.7"
+  - "3.4"
+  - "3.5"
   - "3.6"
 
 # Manually define here the combinations environment variables to test
@@ -69,3 +71,7 @@ script:
 #Send notifications to slack
 notifications:
   slack: andela:qcESb11tbSzWp8SiteRorMkQ
+  
+ #Coveralls
+after_success:
+  - coveralls
