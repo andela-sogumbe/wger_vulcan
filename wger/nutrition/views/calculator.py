@@ -28,7 +28,6 @@ from wger.nutrition.forms import (
     DailyCaloriesForm
 )
 
-
 logger = logging.getLogger(__name__)
 
 '''
@@ -38,9 +37,9 @@ Protein calculator views
 
 @login_required
 def view(request):
-    '''
+    """
     The basal metabolic rate detail page
-    '''
+    """
 
     form_data = {'age': request.user.userprofile.age,
                  'height': request.user.userprofile.height,
@@ -57,11 +56,11 @@ def view(request):
 
 @login_required
 def calculate_bmr(request):
-    '''
+    """
     Calculates the basal metabolic rate.
 
     Currently only the Mifflin-St.Jeor-Formel is supported
-    '''
+    """
 
     data = []
 
@@ -84,9 +83,9 @@ def calculate_bmr(request):
 
 @login_required
 def calculate_activities(request):
-    '''
+    """
     Calculates the calories needed by additional physical activities
-    '''
+    """
 
     data = []
 
