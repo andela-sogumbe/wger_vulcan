@@ -50,7 +50,6 @@ from wger.utils.helpers import check_token, make_token
 from wger.utils.pdf import styleSheet
 from wger.utils.language import load_language
 
-
 logger = logging.getLogger(__name__)
 
 
@@ -72,9 +71,9 @@ def overview(request):
 
 @login_required
 def add(request):
-    '''
+    """
     Add a new nutrition plan and redirect to its page
-    '''
+    """
 
     plan = NutritionPlan()
     plan.user = request.user
@@ -85,9 +84,9 @@ def add(request):
 
 
 class PlanDeleteView(WgerDeleteMixin, DeleteView):
-    '''
+    """
     Generic view to delete a nutritional plan
-    '''
+    """
 
     model = NutritionPlan
     fields = ('description', 'has_goal_calories')
@@ -96,36 +95,36 @@ class PlanDeleteView(WgerDeleteMixin, DeleteView):
     messages = ugettext_lazy('Successfully deleted')
 
     def get_context_data(self, **kwargs):
-        '''
+        """
         Send some additional data to the template
-        '''
+        """
         context = super(PlanDeleteView, self).get_context_data(**kwargs)
         context['title'] = _(u'Delete {0}?').format(self.object)
         return context
 
 
 class PlanEditView(WgerFormMixin, UpdateView):
-    '''
+    """
     Generic view to update an existing nutritional plan
-    '''
+    """
 
     model = NutritionPlan
     fields = ('description', 'has_goal_calories')
     form_action_urlname = 'nutrition:plan:edit'
 
     def get_context_data(self, **kwargs):
-        '''
+        """
         Send some additional data to the template
-        '''
+        """
         context = super(PlanEditView, self).get_context_data(**kwargs)
         context['title'] = _(u'Edit {0}').format(self.object)
         return context
 
 
 def view(request, id):
-    '''
+    """
     Show the nutrition plan with the given ID
-    '''
+    """
     template_data = {}
 
     plan = get_object_or_404(NutritionPlan, pk=id)
@@ -163,9 +162,9 @@ def view(request, id):
 
 @login_required
 def copy(request, pk):
-    '''
+    """
     Copy the nutrition plan
-    '''
+    """
 
     plan = get_object_or_404(NutritionPlan, pk=pk, user=request.user)
 
@@ -197,13 +196,13 @@ def copy(request, pk):
 
 
 def export_pdf(request, id, uidb64=None, token=None):
-    '''
+    """
     Generates a PDF with the contents of a nutrition plan
 
     See also
     * http://www.blog.pythonlibrary.org/2010/09/21/reportlab
     * http://www.reportlab.com/apis/reportlab/dev/platypus.html
-    '''
+    """
 
     # Load the plan
     if uidb64 is not None and token is not None:
@@ -316,7 +315,7 @@ def export_pdf(request, id, uidb64=None, token=None):
     # Create table with nutritional calculations
     data = []
     data.append([Paragraph(u'<para align="center">{0}</para>'.format(_('Nutritional data')),
-                 styleSheet["Bold"])])
+                           styleSheet["Bold"])])
     data.append([Paragraph(_('Macronutrients'), styleSheet["Normal"]),
                  Paragraph(_('Total'), styleSheet["Normal"]),
                  Paragraph(_('Percent of energy'), styleSheet["Normal"]),
