@@ -6,22 +6,23 @@ from django.db import migrations, models
 
 
 def copy_name(apps, schema_editor):
-    '''
+    """
     Copies the exercise name to the original name field
-    '''
-    Excercise = apps.get_model("exercises", "Exercise")
-    for exercise in Excercise.objects.all():
+    """
+    excercise = apps.get_model("exercises", "Exercise")
+    for exercise in excercise.objects.all():
         exercise.name_original = exercise.name
         exercise.save()
 
 
 def capitalize_name(apps, schema_editor):
-    '''
+    """
     Capitalizes the name of the exercises
 
     The algorithm is copied here as it was implemented on the day the migration
     was written.
-    '''
+    """
+
     def capitalize(input):
         out = []
         for word in input.split(' '):
@@ -31,13 +32,13 @@ def capitalize_name(apps, schema_editor):
                 out.append(word)
         return ' '.join(out)
 
-    Excercise = apps.get_model("exercises", "Exercise")
-    for exercise in Excercise.objects.all():
+    excercise = apps.get_model("exercises", "Exercise")
+    for exercise in excercise.objects.all():
         exercise.name = capitalize(exercise.name_original)
         exercise.save()
 
-class Migration(migrations.Migration):
 
+class Migration(migrations.Migration):
     dependencies = [
         ('exercises', '0002_auto_20150307_1841'),
     ]
@@ -46,8 +47,11 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='exercise',
             name='name_original',
-            field=models.CharField(default='', max_length=200, verbose_name='Name'),
+            field=models.CharField(default='', max_length=200,
+                                   verbose_name='Name'),
         ),
-        migrations.RunPython(copy_name, reverse_code=migrations.RunPython.noop),
-        migrations.RunPython(capitalize_name, reverse_code=migrations.RunPython.noop),
+        migrations.RunPython(copy_name,
+                             reverse_code=migrations.RunPython.noop),
+        migrations.RunPython(capitalize_name,
+                             reverse_code=migrations.RunPython.noop),
     ]
