@@ -36,6 +36,7 @@ install:
   - . $HOME/.nvm/nvm.sh
   - nvm install $TRAVIS_NODE_VERSION
   - nvm use $TRAVIS_NODE_VERSION
+  - pip install coveralls
 
   # Install requirements
   - pip install -r requirements_devel.txt
@@ -65,3 +66,6 @@ script:
 
   # Code coverage
   - coverage report
+
+ after_success:
+  - coveralls
