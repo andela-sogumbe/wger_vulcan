@@ -44,7 +44,8 @@ class Migration(migrations.Migration):
                                   validators=[
                                       django.core.validators.MinLengthValidator(
                                           40)])),
-                ('name', models.CharField(max_length=200,verbose_name='Name')),
+                ('name', models.CharField(max_length=200,
+                                          verbose_name='Name')),
                 ('creation_date',
                  models.DateField(auto_now_add=True, verbose_name='Date',
                                   null=True)),

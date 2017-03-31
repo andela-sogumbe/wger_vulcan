@@ -6,22 +6,22 @@ from django.db import migrations, models
 
 
 def copy_name(apps, schema_editor):
-    '''
+    """
     Copies the exercise name to the original name field
-    '''
-    Excercise = apps.get_model("exercises", "Exercise")
-    for exercise in Excercise.objects.all():
+    """
+    excercise = apps.get_model("exercises", "Exercise")
+    for exercise in excercise.objects.all():
         exercise.name_original = exercise.name
         exercise.save()
 
 
 def capitalize_name(apps, schema_editor):
-    '''
+    """
     Capitalizes the name of the exercises
 
     The algorithm is copied here as it was implemented on the day the migration
     was written.
-    '''
+    """
 
     def capitalize(input):
         out = []
@@ -32,8 +32,8 @@ def capitalize_name(apps, schema_editor):
                 out.append(word)
         return ' '.join(out)
 
-    Excercise = apps.get_model("exercises", "Exercise")
-    for exercise in Excercise.objects.all():
+    excercise = apps.get_model("exercises", "Exercise")
+    for exercise in excercise.objects.all():
         exercise.name = capitalize(exercise.name_original)
         exercise.save()
 
