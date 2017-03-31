@@ -66,3 +66,7 @@ script:
 
   # Code coverage
   - coverage report
+  
+ #Coveralls
+after_success:
+  - coveralls
