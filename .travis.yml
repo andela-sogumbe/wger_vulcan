@@ -67,5 +67,5 @@ script:
   - coverage report
   
  #Coveralls
-after_success
+after_success:
   - coveralls
