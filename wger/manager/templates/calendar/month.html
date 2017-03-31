@@ -49,7 +49,8 @@ $(document).ready(function() {
 
         <h3>
             {{date}}
-            <small><a href="{% url 'manager:workout:calendar-day' owner_user date.year date.month date.day %}">{% trans 'Detail page' %}</a></small>
+            <small><a href="{% url 'manager:workout:calendar-day' owner_user date.year date.month date.day %}">
+                {% trans 'Detail page' %}</a></small>
         </h3>
 
         {% include 'calendar/partial_overview_table.html' %}
@@ -72,7 +73,8 @@ $(document).ready(function() {
                             {% if is_owner %}
                             <span class="editoptions">
                                 <div class="btn-group pull-right">
-                                    <button type="button" class="btn btn-default dropdown-toggle btn-xs" data-toggle="dropdown">
+                                    <button type="button" class="btn btn-default dropdown-toggle btn-xs"
+                                            data-toggle="dropdown">
                                         <span class="{% fa_class 'cog' %}"></span>
                                     </button>
                                     <ul class="dropdown-menu" role="menu">
@@ -119,7 +121,8 @@ $(document).ready(function() {
 day in your current workout:{% endblocktrans %} <strong>{{current_workout}}</strong></p>
 
                 {% for day in current_workout.day_set.all %}
-                    <a href="{% url 'manager:day:log' day.pk %}" class="btn btn-block btn-default">{{day.description}}</a>
+                    <a href="{% url 'manager:day:log' day.pk %}" class="btn btn-block btn-default">
+                        {{day.description}}</a>
                 {% endfor %}
 
                 {% else %}
@@ -162,15 +165,18 @@ you can click on them to see the details.{% endblocktrans %}</p>
         <div class="panel panel-default">
             <div class="panel-heading" role="tab" id="heading{{ year.grouper }}">
                 <h4 class="panel-title">
-                    <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse{{ year.grouper }}" aria-expanded="true" aria-controls="collapse{{ year.grouper }}">
+                    <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse{{ year.grouper }}"
+                       aria-expanded="true" aria-controls="collapse{{ year.grouper }}">
                         {{ year.grouper }}
                     </a>
                 </h4>
             </div>
-            <div id="collapse{{ year.grouper }}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading{{ year.grouper }}">
+            <div id="collapse{{ year.grouper }}" class="panel-collapse collapse" role="tabpanel"
+                 aria-labelledby="heading{{ year.grouper }}">
                 <div class="list-group">
                     {% for month in year.list %}
-                        <a href="{% url 'manager:workout:calendar' owner_user year.grouper month.month %}" class="list-group-item">{{month|date:"F"}}</a>
+                        <a href="{% url 'manager:workout:calendar' owner_user year.grouper month.month %}"
+                           class="list-group-item">{{month|date:"F"}}</a>
                     {% endfor %}
                 </div>
             </div>
@@ -182,7 +188,8 @@ you can click on them to see the details.{% endblocktrans %}</p>
 
 {% block options %}
 {% if is_owner %}
-    <a href="#" id="calendar-day-select-link" data-toggle="modal" data-target="#ecalendar-day-select-popup" class="btn btn-success btn-sm">
+    <a href="#" id="calendar-day-select-link" data-toggle="modal" data-target="#ecalendar-day-select-popup"
+       class="btn btn-success btn-sm">
         {% trans "Add new log" %}
     </a>
 {% endif %}

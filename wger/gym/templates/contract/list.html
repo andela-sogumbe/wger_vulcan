@@ -69,5 +69,6 @@
 {# Options #}
 {#         #}
 {% block options %}
-    <a href="{% url 'gym:contract:add' member.pk %}" class="wger-modal-dialog btn btn-sm btn-success">{% trans "Add" %}</a>
+    <a href="{% url 'gym:contract:add' member.pk %}" class="wger-modal-dialog btn btn-sm btn-success">
+        {% trans "Add" %}</a>
 {% endblock %}

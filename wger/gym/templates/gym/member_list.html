@@ -58,7 +58,8 @@
 
     {% if perms.gym.manage_gym or perms.gym.manage_gyms %}
     <td style="text-align: right;">
-        <a href="{% url 'gym:gym:edit-user-permission' current_user.obj.pk %}" class="btn btn-default btn-xs wger-modal-dialog">
+        <a href="{% url 'gym:gym:edit-user-permission' current_user.obj.pk %}"
+           class="btn btn-default btn-xs wger-modal-dialog">
             <span class="{% fa_class 'cog' %}"></span>
         </a>
     </td>
@@ -169,7 +170,8 @@
     </button>
     <ul class="dropdown-menu" role="menu">
         <li>
-            <a href="{% url 'gym:admin_config:edit' user.gymadminconfig.id %}" class="wger-modal-dialog">{% trans "Edit"%}</a>
+            <a href="{% url 'gym:admin_config:edit' user.gymadminconfig.id %}" class="wger-modal-dialog">
+                {% trans "Edit"%}</a>
         </li>
     </ul>
 </div>
