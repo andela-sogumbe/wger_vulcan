@@ -61,7 +61,6 @@ patterns_plan = [
         name='export-pdf'),
 ]
 
-
 # sub patterns for meals
 patterns_meal = [
     url(r'^(?P<plan_pk>\d+)/meal/add/$',
@@ -75,7 +74,6 @@ patterns_meal = [
         name='delete'),
 ]
 
-
 # sub patterns for meal items
 patterns_meal_item = [
     url(r'^(?P<meal_id>\d+)/item/add/$',
@@ -88,7 +86,6 @@ patterns_meal_item = [
         meal_item.delete_meal_item,
         name='delete'),
 ]
-
 
 # sub patterns for ingredient
 patterns_ingredient = [
@@ -121,7 +118,6 @@ patterns_ingredient = [
         name='view'),
 ]
 
-
 # sub patterns for weight units
 patterns_weight_unit = [
     url(r'^list/$',
@@ -138,7 +134,6 @@ patterns_weight_unit = [
         name='edit'),
 ]
 
-
 # sub patterns for weight units / ingredient cross table
 patterns_unit_ingredient = [
     url(r'^add/(?P<ingredient_pk>\d+)/$',
@@ -151,7 +146,6 @@ patterns_unit_ingredient = [
         unit_ingredient.WeightUnitIngredientDeleteView.as_view(),
         name='delete'),
 ]
-
 
 # sub patterns for BMI calculator
 patterns_bmi = [
@@ -166,7 +160,6 @@ patterns_bmi = [
         name='chart-data'),  # JS
 ]
 
-
 # sub patterns for calories calculator
 patterns_calories = [
     url(r'^$',
@@ -180,14 +173,13 @@ patterns_calories = [
         name='activities'),  # JS
 ]
 
-
 urlpatterns = [
-   url(r'^', include(patterns_plan, namespace="plan")),
-   url(r'^meal/', include(patterns_meal, namespace="meal")),
-   url(r'^meal/item/', include(patterns_meal_item, namespace="meal_item")),
-   url(r'^ingredient/', include(patterns_ingredient, namespace="ingredient")),
-   url(r'^unit/', include(patterns_weight_unit, namespace="weight_unit")),
-   url(r'^unit-to-ingredient/', include(patterns_unit_ingredient, namespace="unit_ingredient")),
-   url(r'^calculator/bmi/', include(patterns_bmi, namespace="bmi")),
-   url(r'^calculator/calories/', include(patterns_calories, namespace="calories")),
+    url(r'^', include(patterns_plan, namespace="plan")),
+    url(r'^meal/', include(patterns_meal, namespace="meal")),
+    url(r'^meal/item/', include(patterns_meal_item, namespace="meal_item")),
+    url(r'^ingredient/', include(patterns_ingredient, namespace="ingredient")),
+    url(r'^unit/', include(patterns_weight_unit, namespace="weight_unit")),
+    url(r'^unit-to-ingredient/', include(patterns_unit_ingredient, namespace="unit_ingredient")),
+    url(r'^calculator/bmi/', include(patterns_bmi, namespace="bmi")),
+    url(r'^calculator/calories/', include(patterns_calories, namespace="calories")),
 ]
