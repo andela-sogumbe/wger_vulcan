@@ -14,22 +14,22 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 
-from django.core import mail
 from django.conf import settings
-
+from django.core import mail
 from django.core.management.base import BaseCommand
+
 from wger.email.models import CronEntry
 
 
 class Command(BaseCommand):
-    '''
+    """
     Sends the prepared mass emails
-    '''
+    """
 
     def handle(self, **options):
-        '''
+        """
         Send some mails and remove them from the list
-        '''
+        """
         if CronEntry.objects.count():
             for email in CronEntry.objects.all()[:100]:
                 mail.send_mail(email.log.subject,
