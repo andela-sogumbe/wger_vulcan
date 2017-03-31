@@ -15,15 +15,13 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with Workout Manager.  If not, see <http://www.gnu.org/licenses/>.
 
-from rest_framework import viewsets
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
-from rest_framework.response import Response
-from rest_framework.decorators import detail_route, api_view
-
+from django.utils.translation import ugettext as _
 from easy_thumbnails.alias import aliases
 from easy_thumbnails.files import get_thumbnailer
-
-from django.utils.translation import ugettext as _
+from rest_framework import viewsets
+from rest_framework.decorators import detail_route, api_view
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from rest_framework.response import Response
 
 from wger.config.models import LanguageConfig
 from wger.exercises.api.serializers import (
@@ -47,9 +45,9 @@ from wger.utils.permissions import CreateOnlyPermission
 
 
 class ExerciseViewSet(viewsets.ModelViewSet):
-    '''
+    """
     API endpoint for exercise objects
-    '''
+    """
     queryset = Exercise.objects.all()
     serializer_class = ExerciseSerializer
     permission_classes = (IsAuthenticatedOrReadOnly, CreateOnlyPermission)
@@ -67,9 +65,9 @@ class ExerciseViewSet(viewsets.ModelViewSet):
                      'license_author')
 
     def perform_create(self, serializer):
-        '''
+        """
         Set author and status
-        '''
+        """
         language = load_language()
         obj = serializer.save(language=language)
         # Todo is it right to call set author after save?
@@ -79,18 +77,19 @@ class ExerciseViewSet(viewsets.ModelViewSet):
 
 @api_view(['GET'])
 def search(request):
-    '''
+    """
     Searches for exercises.
 
     This format is currently used by the exercise search autocompleter
-    '''
+    """
     q = request.GET.get('term', None)
     results = []
     json_response = {}
 
     if q:
         languages = load_item_languages(LanguageConfig.SHOW_ITEM_EXERCISES,
-                                        language_code=request.GET.get('language', None))
+                                        language_code=request.GET.get(
+                                            'language', None))
         exercises = (Exercise.objects.filter(name__icontains=q)
                      .filter(language__in=languages)
                      .filter(status=Exercise.STATUS_ACCEPTED)
@@ -124,9 +123,9 @@ def search(request):
 
 
 class EquipmentViewSet(viewsets.ReadOnlyModelViewSet):
-    '''
+    """
     API endpoint for equipment objects
-    '''
+    """
     queryset = Equipment.objects.all()
     serializer_class = EquipmentSerializer
     ordering_fields = '__all__'
@@ -134,9 +133,9 @@ class EquipmentViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 class ExerciseCategoryViewSet(viewsets.ReadOnlyModelViewSet):
-    '''
+    """
     API endpoint for exercise categories objects
-    '''
+    """
     queryset = ExerciseCategory.objects.all()
     serializer_class = ExerciseCategorySerializer
     ordering_fields = '__all__'
@@ -144,9 +143,9 @@ class ExerciseCategoryViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 class ExerciseImageViewSet(viewsets.ModelViewSet):
-    '''
+    """
     API endpoint for exercise image objects
-    '''
+    """
     queryset = ExerciseImage.objects.all()
     serializer_class = ExerciseImageSerializer
     permission_classes = (IsAuthenticatedOrReadOnly, CreateOnlyPermission)
@@ -159,9 +158,9 @@ class ExerciseImageViewSet(viewsets.ModelViewSet):
 
     @detail_route()
     def thumbnails(self, request, pk):
-        '''
+        """
         Return a list of the image's thumbnails
-        '''
+        """
         try:
             image = ExerciseImage.objects.get(pk=pk)
         except ExerciseImage.DoesNotExist:
@@ -178,9 +177,9 @@ class ExerciseImageViewSet(viewsets.ModelViewSet):
         return Response(thumbnails)
 
     def perform_create(self, serializer):
-        '''
+        """
         Set the license data
-        '''
+        """
         obj = serializer.save()
         # Todo is it right to call set author after save?
         obj.set_author(self.request)
@@ -188,9 +187,9 @@ class ExerciseImageViewSet(viewsets.ModelViewSet):
 
 
 class ExerciseCommentViewSet(viewsets.ReadOnlyModelViewSet):
-    '''
+    """
     API endpoint for exercise comment objects
-    '''
+    """
     queryset = ExerciseComment.objects.all()
     serializer_class = ExerciseCommentSerializer
     ordering_fields = '__all__'
@@ -199,9 +198,9 @@ class ExerciseCommentViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 class MuscleViewSet(viewsets.ReadOnlyModelViewSet):
-    '''
+    """
     API endpoint for muscle objects
-    '''
+    """
     queryset = Muscle.objects.all()
     serializer_class = MuscleSerializer
     ordering_fields = '__all__'
