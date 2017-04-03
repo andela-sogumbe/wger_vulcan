@@ -23,6 +23,11 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "settings")
 # setting points here.
 application = get_wsgi_application()
 
+if os.environ.get('HEROKU'):
+    from dj_static import Cling
+    
+    application = Cling(get_wsgi_application())
+
 # Apply WSGI middleware here.
 # from helloworld.wsgi import HelloWorldApplication
 # application = HelloWorldApplication(application)
