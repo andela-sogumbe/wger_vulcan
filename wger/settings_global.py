@@ -1,17 +1,16 @@
 # -*- coding: utf-8 -*-
 
 # This file is part of wger Workout Manager.
-#
 # wger Workout Manager is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
-#
+
 # wger Workout Manager is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
-#
+
 # You should have received a copy of the GNU Affero General Public License
 
 import re
@@ -28,9 +27,8 @@ import os
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 SITE_ROOT = os.path.realpath(os.path.dirname(__file__))
 
-#
+
 # Application definition
-#
 SITE_ID = 1
 ROOT_URLCONF = 'wger.urls'
 WSGI_APPLICATION = 'wger.wsgi.application'
@@ -102,7 +100,6 @@ BOWER_INSTALLED_APPS = (
     'devbridge-autocomplete#1.2.x',
     'sortablejs#1.4.x',
 )
-
 
 MIDDLEWARE_CLASSES = (
     'corsheaders.middleware.CorsMiddleware',
@@ -182,23 +179,15 @@ STATICFILES_FINDERS = (
 )
 
 
-#
 # Email
-#
 EMAIL_SUBJECT_PREFIX = '[wger] '
 # EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
-
-#
 # Login
-#
 LOGIN_URL = '/user/login'
 LOGIN_REDIRECT_URL = '/'
 
-
-#
 # Internationalization
-#
 USE_TZ = True
 USE_I18N = True
 USE_L10N = True
@@ -237,11 +226,8 @@ LOCALE_PATHS = (
 
 FLAVOURS_STORAGE_BACKEND = 'session'
 
-
-#
 # Logging
 # See http://docs.python.org/library/logging.config.html
-#
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -265,16 +251,10 @@ LOGGING = {
     }
 }
 
-
-#
 # ReCaptcha
-#
 RECAPTCHA_USE_SSL = True
 
-
-#
 # Cache
-#
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
@@ -283,10 +263,7 @@ CACHES = {
     }
 }
 
-
-#
 # Easy thumbnails
-#
 THUMBNAIL_ALIASES = {
     '': {
         'micro': {'size': (30, 30)},
@@ -306,10 +283,7 @@ THUMBNAIL_ALIASES = {
     },
 }
 
-
-#
 # Django compressor
-#
 STATIC_ROOT = ''
 STATIC_URL = '/static/'
 
@@ -327,9 +301,7 @@ if sys.platform.startswith('win32'):
 else:
     BOWER_PATH = os.path.join('node_modules', '.bin', 'bower')
 
-#
 # Django Rest Framework
-#
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': ('wger.utils.permissions.WgerPermission',),
     'PAGINATE_BY': 20,
@@ -343,25 +315,18 @@ REST_FRAMEWORK = {
                                 'rest_framework.filters.OrderingFilter',)
 }
 
-
-#
 # CORS headers: allow all hosts to access the API
-#
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_URLS_REGEX = r'^/api/.*$'
 
-#
 # Ignore these URLs if they cause 404
-#
 IGNORABLE_404_URLS = (
     re.compile(r'^/favicon\.ico$'),
 )
 
-#
 # Application specific configuration options
-#
+
 # Consult docs/settings.rst for more information
-#
 WGER_SETTINGS = {
     'USE_RECAPTCHA': False,
     'REMOVE_WHITESPACE': False,
