@@ -34,9 +34,17 @@ before_script:
 - if [[ "$DB" = "postgresql" ]]; then psql -c 'CREATE DATABASE test_wger;' -U postgres;
   fi
 script:
+
+# Formatting
 - pep8 wger
+
+# Javascript linting
 - gulp lint
+
+# Regular application
 - coverage run --source='.' ./manage.py test --parallel
+
+# Code coverage
 - coverage report
 deploy:
   provider: heroku
@@ -45,5 +53,11 @@ deploy:
   app: wgervulcan
   on:
     repo: andela/wger_vulcan
+
+#Send notifications to slack
+notifications:
+  slack: andela:qcESb11tbSzWp8SiteRorMkQ
+  
+ #Coveralls
 after_success:
 - coveralls
