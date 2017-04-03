@@ -45,6 +45,5 @@ deploy:
   app: wgervulcan
   on:
     repo: andela/wger_vulcan
-    branch: ch-integrate-heroku
 after_success:
 - coveralls
