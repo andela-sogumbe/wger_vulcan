@@ -35,11 +35,11 @@ before_script:
   fi
 script:
 
-# Formatting
-- pep8 wger
-
-# Javascript linting
-- gulp lint
+## Formatting
+#- pep8 wger
+#
+## Javascript linting
+#- gulp lint
 
 # Regular application
 - coverage run --source='.' ./manage.py test --parallel
