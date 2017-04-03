@@ -7,9 +7,9 @@ cache:
   - wger/node_modules
 sudo: false
 python:
-- '2.7'
-- '3.4'
-- '3.5'
+#- '2.7'
+#- '3.4'
+#- '3.5'
 - '3.6'
 env:
 - TEST_MOBILE=True  DB=postgresql TRAVIS_NODE_VERSION="4"
@@ -57,7 +57,7 @@ deploy:
 #Send notifications to slack
 notifications:
   slack: andela:qcESb11tbSzWp8SiteRorMkQ
-  
+
  #Coveralls
 after_success:
 - coveralls
