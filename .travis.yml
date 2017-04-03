@@ -66,6 +66,11 @@ script:
 
   # Code coverage
   - coverage report
+
+
+#Send notifications to slack
+notifications:
+  slack: andela:qcESb11tbSzWp8SiteRorMkQ
   
  #Coveralls
 after_success:
