@@ -104,7 +104,7 @@ class GymUserListView(LoginRequiredMixin, WgerMultiplePermissionRequiredMixin, L
         out = {'admins': [],
                'members': []}
 
-        for u in Gym.objects.get_members(self.kwargs['pk']).select_related('usercache').filter(is_active=True):
+        for u in Gym.objects.get_members(self.kwargs['pk']).select_related('usercache'):
             out['members'].append({'obj': u,
                                    'last_log': u.usercache.last_activity})
 
@@ -116,6 +116,7 @@ class GymUserListView(LoginRequiredMixin, WgerMultiplePermissionRequiredMixin, L
                                             'gym_trainer': u.has_perm('gym.gym_trainer'),
                                             'any_admin': is_any_gym_admin(u)}
                                   })
+
         return out
 
     def get_context_data(self, **kwargs):
@@ -126,7 +127,7 @@ class GymUserListView(LoginRequiredMixin, WgerMultiplePermissionRequiredMixin, L
         context['gym'] = Gym.objects.get(pk=self.kwargs['pk'])
         context['admin_count'] = len(context['object_list']['admins'])
         context['user_count'] = len(context['object_list']['members'])
-        context['user_table'] = {'keys': [_('ID'), _('Username'), _('Name'), _('Last activity')],
+        context['user_table'] = {'keys': [_('ID'), _('Username'), _('Name'), _('Last activity'), _('Active')],
                                  'users': context['object_list']['members']}
         return context
 
@@ -199,11 +200,6 @@ def gym_new_user_info_export(request):
     response['Content-Disposition'] = 'attachment; filename={0}'.format(filename)
     response['Content-Length'] = len(response.content)
     return response
-
-@login_required
-def gym_inactive_users(request, pk):
-    context = {"data": "datas"}
-    return render(request, 'gym/inactive_member_list.html', context)
 
 
 def reset_user_password(request, user_pk):
