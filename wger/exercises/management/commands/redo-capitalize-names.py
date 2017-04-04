@@ -21,12 +21,12 @@ from wger.utils.helpers import smart_capitalize
 
 
 class Command(BaseCommand):
-    '''
+    """
     Re-calculates the capitalized exercise names
 
     This is a safe operation, since the original names (as entered by the user)
     are still available.
-    '''
+    """
 
     help = 'Re-calculates the capitalized exercise names'
 
@@ -37,6 +37,7 @@ class Command(BaseCommand):
             if options['verbosity'] > 1:
                 self.stdout.write('#{} {} -> {}'.format(exercise.id,
                                                         exercise.name,
-                                                        smart_capitalize(exercise.name_original)))
+                                                        smart_capitalize(
+                                                            exercise.name_original)))
             exercise.name = smart_capitalize(exercise.name_original)
             exercise.save()

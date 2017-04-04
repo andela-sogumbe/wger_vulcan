@@ -27,21 +27,22 @@ from wger.utils.cache import get_template_cache_name
 
 
 class ExerciseCategoryRepresentationTestCase(WorkoutManagerTestCase):
-    '''
+    """
     Test the representation of a model
-    '''
+    """
 
     def test_representation(self):
-        '''
+        """
         Test that the representation of an object is correct
-        '''
-        self.assertEqual("{0}".format(ExerciseCategory.objects.get(pk=1)), 'Category')
+        """
+        self.assertEqual("{0}".format(ExerciseCategory.objects.get(pk=1)),
+                         'Category')
 
 
 class CategoryOverviewTestCase(WorkoutManagerAccessTestCase):
-    '''
+    """
     Test that only admins see the edit links
-    '''
+    """
     url = 'exercise:category:list'
     anonymous_fail = True
     user_success = 'admin'
@@ -59,9 +60,9 @@ class CategoryOverviewTestCase(WorkoutManagerAccessTestCase):
 
 
 class DeleteExerciseCategoryTestCase(WorkoutManagerDeleteTestCase):
-    '''
+    """
     Exercise category delete test case
-    '''
+    """
 
     object_class = ExerciseCategory
     url = 'exercise:category:delete'
@@ -71,9 +72,9 @@ class DeleteExerciseCategoryTestCase(WorkoutManagerDeleteTestCase):
 
 
 class EditExerciseCategoryTestCase(WorkoutManagerEditTestCase):
-    '''
+    """
     Tests editing an exercise category
-    '''
+    """
 
     object_class = ExerciseCategory
     url = 'exercise:category:edit'
@@ -82,9 +83,9 @@ class EditExerciseCategoryTestCase(WorkoutManagerEditTestCase):
 
 
 class AddExerciseCategoryTestCase(WorkoutManagerAddTestCase):
-    '''
+    """
     Tests adding an exercise category
-    '''
+    """
 
     object_class = ExerciseCategory
     url = 'exercise:category:add'
@@ -92,48 +93,55 @@ class AddExerciseCategoryTestCase(WorkoutManagerAddTestCase):
 
 
 class ExerciseCategoryCacheTestCase(WorkoutManagerTestCase):
-    '''
+    """
     Cache test case
-    '''
+    """
 
     def test_overview_cache_update(self):
-        '''
+        """
         Test that the template cache for the overview is correctly reseted when
         performing certain operations
-        '''
+        """
 
         self.client.get(reverse('exercise:exercise:overview'))
         self.client.get(reverse('exercise:exercise:view', kwargs={'id': 2}))
 
-        old_exercise_overview = cache.get(get_template_cache_name('exercise-overview', 2))
-        old_exercise_overview_mobile = cache.get(get_template_cache_name('exercise-overview-mobile',
-                                                                         2))
+        old_exercise_overview = cache.get(
+            get_template_cache_name('exercise-overview', 2))
+        old_exercise_overview_mobile = cache.get(
+            get_template_cache_name('exercise-overview-mobile',
+                                    2))
 
         category = ExerciseCategory.objects.get(pk=2)
         category.name = 'Cool category'
         category.save()
 
-        self.assertFalse(cache.get(get_template_cache_name('exercise-overview', 2)))
-        self.assertFalse(cache.get(get_template_cache_name('exercise-overview-mobile', 2)))
+        self.assertFalse(
+            cache.get(get_template_cache_name('exercise-overview', 2)))
+        self.assertFalse(
+            cache.get(get_template_cache_name('exercise-overview-mobile', 2)))
 
         self.client.get(reverse('exercise:exercise:overview'))
         self.client.get(reverse('exercise:muscle:overview'))
         self.client.get(reverse('exercise:exercise:view', kwargs={'id': 2}))
 
-        new_exercise_overview = cache.get(get_template_cache_name('exercise-overview', 2))
-        new_exercise_overview_mobile = cache.get(get_template_cache_name('exercise-overview-mobile',
-                                                                         2))
+        new_exercise_overview = cache.get(
+            get_template_cache_name('exercise-overview', 2))
+        new_exercise_overview_mobile = cache.get(
+            get_template_cache_name('exercise-overview-mobile',
+                                    2))
 
         if not self.is_mobile:
             self.assertNotEqual(old_exercise_overview, new_exercise_overview)
         else:
-            self.assertNotEqual(old_exercise_overview_mobile, new_exercise_overview_mobile)
+            self.assertNotEqual(old_exercise_overview_mobile,
+                                new_exercise_overview_mobile)
 
 
 class ExerciseCategoryApiTestCase(api_base_test.ApiBaseResourceTestCase):
-    '''
+    """
     Tests the exercise category overview resource
-    '''
+    """
     pk = 2
     resource = ExerciseCategory
     private_resource = False

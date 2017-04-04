@@ -17,6 +17,7 @@ python:
   - "2.7"
   - "3.4"
   - "3.5"
+  - "3.6"
 
 # Manually define here the combinations environment variables to test
 # https://github.com/travis-ci/travis-ci/issues/1519
@@ -65,3 +66,12 @@ script:
 
   # Code coverage
   - coverage report
+
+
+#Send notifications to slack
+notifications:
+  slack: andela:qcESb11tbSzWp8SiteRorMkQ
+  
+ #Coveralls
+after_success:
+  - coveralls
