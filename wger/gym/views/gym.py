@@ -200,6 +200,11 @@ def gym_new_user_info_export(request):
     response['Content-Length'] = len(response.content)
     return response
 
+@login_required
+def gym_inactive_users(request, pk):
+    context = {"data": "datas"}
+    return render(request, 'gym/inactive_member_list.html', context)
+
 
 def reset_user_password(request, user_pk):
     '''
