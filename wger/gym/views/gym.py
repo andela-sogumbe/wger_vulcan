@@ -116,6 +116,7 @@ class GymUserListView(LoginRequiredMixin, WgerMultiplePermissionRequiredMixin, L
                                             'gym_trainer': u.has_perm('gym.gym_trainer'),
                                             'any_admin': is_any_gym_admin(u)}
                                   })
+
         return out
 
     def get_context_data(self, **kwargs):
@@ -126,7 +127,8 @@ class GymUserListView(LoginRequiredMixin, WgerMultiplePermissionRequiredMixin, L
         context['gym'] = Gym.objects.get(pk=self.kwargs['pk'])
         context['admin_count'] = len(context['object_list']['admins'])
         context['user_count'] = len(context['object_list']['members'])
-        context['user_table'] = {'keys': [_('ID'), _('Username'), _('Name'), _('Last activity')],
+        context['user_table'] = {'keys': [_('ID'), _('Username'), _('Name'),
+                                          _('Last activity'), _('Status')],
                                  'users': context['object_list']['members']}
         return context
 
