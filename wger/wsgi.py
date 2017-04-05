@@ -25,7 +25,7 @@ application = get_wsgi_application()
 
 if os.environ.get('HEROKU'):
     from whitenoise.django import DjangoWhiteNoise
-    
+
     application = DjangoWhiteNoise(get_wsgi_application())
 
 # Apply WSGI middleware here.

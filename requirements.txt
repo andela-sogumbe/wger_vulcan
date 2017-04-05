@@ -39,7 +39,6 @@ rcssmin==1.0.6
 reportlab==3.4.0
 requests==2.13.0
 rjsmin==1.0.12
-six==1.10.0
 snowballstemmer==1.2.1
 Sphinx==1.5.3
 sqlparse==0.2.3
