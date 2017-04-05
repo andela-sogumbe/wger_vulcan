@@ -41,6 +41,7 @@ requests
 Babel
 alabaster
 appdirs
+packaging
 
 
 # REST API
