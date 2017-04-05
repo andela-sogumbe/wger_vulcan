@@ -6,8 +6,8 @@
 -r requirements.txt
 
 # Development packages
-six
 pep8
 django-debug-toolbar
 coverage
 tblib
+six
