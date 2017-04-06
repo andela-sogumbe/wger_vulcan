@@ -60,6 +60,7 @@ class DecimalJsonEncoder(json.JSONEncoder):
     individual weight entries in the workout log) and they need to be
     processed, json.dumps() doesn't work on them
     '''
+
     def default(self, obj):
         if isinstance(obj, decimal.Decimal):
             return str(obj)
@@ -214,11 +215,12 @@ def smart_capitalize(input):
     '''
     A "smart" capitalizer
 
-    This is used to capitalize e.g. exercise names. This is different than python's
-    capitalize and the similar django template tag mainly because of side effects
-    when applied to all caps words. E.g. the German "KH" (Kurzhantel) is capitalized
-    to "Kh" or "ß" to "SS". Because of this, only words with more than 2 letters as
-    well as the ones starting with "ß" are ignored.
+    This is used to capitalize e.g. exercise names. This is different than
+    python's capitalize and the similar django template tag mainly because of
+    side effects when applied to all caps words. E.g. the German "KH"
+    (Kurzhantel) is capitalized to "Kh" or "ß" to "SS". Because of this,
+    only words with more than 2 letters as well as the ones starting with
+    "ß" are ignored.
 
     :param input: the input string
     :return: the capitalized string
