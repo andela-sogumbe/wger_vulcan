@@ -28,8 +28,10 @@ class AmazonUserAgentTestCase(WorkoutManagerTestCase):
         Tests 3rd generation user agents
         '''
 
-        agent = "Mozilla/5.0 (Linux; Android 4.2.2; <device> Build/<build>) AppleWebKit/ "\
-                "<webkit> (KHTML, like Gecko) Chrome/<chrome> Mobile Safari/<safari> "\
+        agent = "Mozilla/5.0 (Linux; Android 4.2.2;"\
+                "<device> Build/<build>) AppleWebKit/ "\
+                "<webkit> (KHTML, like Gecko) Chrome/"\
+                "<chrome> Mobile Safari/<safari> "\
                 "AmazonWebAppPlatform/<version> "
         self.assertTrue(user_agents.is_amazon_webview(agent))
 
@@ -38,8 +40,10 @@ class AmazonUserAgentTestCase(WorkoutManagerTestCase):
         Tests 2nd generation user agents
         '''
 
-        agent = "Mozilla/5.0 (Linux; Android 4.0.3; <device> Build/<build>) AppleWebKit/<webkit>" \
-                "(KHTML, like Gecko) Chrome/<chrome> Mobile Safari/<safari> AmazonWebAppPlatform"\
+        agent = "Mozilla/5.0 (Linux; Android 4.0.3;"\
+                "<device> Build/<build>) AppleWebKit/<webkit>" \
+                "(KHTML, like Gecko) Chrome/"\
+                "<chrome> Mobile Safari/<safari> AmazonWebAppPlatform"\
                 "/<version>"
         self.assertTrue(user_agents.is_amazon_webview(agent))
 
@@ -48,8 +52,10 @@ class AmazonUserAgentTestCase(WorkoutManagerTestCase):
         Tests 1st generation user agents
         '''
 
-        agent = "Mozilla/5.0 (Linux; U; Android 2.3.4; <locale>; Kindle Fire Build/GINGERBREAD) "\
-                "AppleWebKit/<webkit> (KHTML, like Gecko) Version/4.0 Safari/<safari> "\
+        agent = "Mozilla/5.0 (Linux; U; Android 2.3.4;"\
+                "<locale>; Kindle Fire Build/GINGERBREAD) "\
+                "AppleWebKit/"\
+                "<webkit> (KHTML, like Gecko) Version/4.0 Safari/<safari> "\
                 "AmazonWebAppPlatform/<version> "
         self.assertTrue(user_agents.is_amazon_webview(agent))
 
@@ -58,8 +64,10 @@ class AmazonUserAgentTestCase(WorkoutManagerTestCase):
         Tests generic android, from amazon app store
         '''
 
-        agent = "Mozilla/5.0 (Linux; U; Android <version>; <locale>; Build/<build>) AppleWebKit/"\
-                "<webkit> (KHTML, like Gecko) Version/4.0 Safari/<safari> AmazonWebAppPlatform/"\
+        agent = "Mozilla/5.0 (Linux; U; Android <version>;"\
+                "<locale>; Build/<build>) AppleWebKit/"\
+                "<webkit> (KHTML, like Gecko) Version/4.0 Safari/"\
+                "<safari> AmazonWebAppPlatform/"\
                 "<version>"
         self.assertTrue(user_agents.is_amazon_webview(agent))
 
@@ -68,10 +76,12 @@ class AmazonUserAgentTestCase(WorkoutManagerTestCase):
         Tests vanilla firefox user agent
         '''
 
-        agent = "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:24.0) Gecko/20100101 Firefox/24.0"
+        agent = "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:24.0)"\
+                "Gecko/20100101 Firefox/24.0"
         self.assertFalse(user_agents.is_amazon_webview(agent))
 
-        agent = "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:25.0) Gecko/20100101 Firefox/25.0"
+        agent = "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:25.0)"\
+                "Gecko/20100101 Firefox/25.0"
         self.assertFalse(user_agents.is_amazon_webview(agent))
 
     def test_user_agent_chrome(self):
@@ -79,11 +89,13 @@ class AmazonUserAgentTestCase(WorkoutManagerTestCase):
         Tests vanilla chrome user agent
         '''
 
-        agent = "Mozilla/5.0 (Windows NT 6.2; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko)"\
+        agent = "Mozilla/5.0 (Windows NT 6.2; Win64; x64)"\
+                "AppleWebKit/537.36 (KHTML, like Gecko)"\
                 "Chrome/32.0.1667.0 Safari/537.36"
         self.assertFalse(user_agents.is_amazon_webview(agent))
 
-        agent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_0) AppleWebKit/537.36 (KHTML, like "\
+        agent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_0)"\
+                "AppleWebKit/537.36 (KHTML, like "\
                 "Gecko) Chrome/32.0.1664.3 Safari/537.36"
         self.assertFalse(user_agents.is_amazon_webview(agent))
 
@@ -100,8 +112,10 @@ class AndroidUserAgentTestCase(WorkoutManagerTestCase):
         Tests the old webview user agent
         '''
 
-        agent = "Mozilla/5.0 (Linux; U; Android 4.1.1; en-gb; Build/KLP) AppleWebKit/534.30 "\
-                "(KHTML, like Gecko) Version/4.0 Safari/534.30 WgerAndroidWebApp"
+        agent = "Mozilla/5.0 (Linux; U; Android 4.1.1; en-gb; Build/KLP)"\
+                "AppleWebKit/534.30 "\
+                "(KHTML, like Gecko) Version/4.0 Safari/534.30"\
+                "WgerAndroidWebApp"
         self.assertTrue(user_agents.is_android_webview(agent))
 
     def test_user_agent_new_ua(self):
@@ -109,8 +123,10 @@ class AndroidUserAgentTestCase(WorkoutManagerTestCase):
         Tests the old webview user agent
         '''
 
-        agent = "Mozilla/5.0 (Linux; Android 4.4; Nexus 5 Build/BuildID) AppleWebKit/537.36 "\
-                "(KHTML, like Gecko) Version/4.0 Chrome/30.0.0.0 Mobile Safari/537.36 "\
+        agent = "Mozilla/5.0 (Linux; Android 4.4; Nexus 5 Build/BuildID)"\
+                "AppleWebKit/537.36 "\
+                "(KHTML, like Gecko) Version/4.0 Chrome/30.0.0.0"\
+                "Mobile Safari/537.36 "\
                 "WgerAndroidWebApp"
         self.assertTrue(user_agents.is_android_webview(agent))
 
@@ -119,10 +135,12 @@ class AndroidUserAgentTestCase(WorkoutManagerTestCase):
         Tests vanilla firefox user agent
         '''
 
-        agent = "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:24.0) Gecko/20100101 Firefox/24.0"
+        agent = "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:24.0)"\
+                "Gecko/20100101 Firefox/24.0"
         self.assertFalse(user_agents.is_android_webview(agent))
 
-        agent = "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:25.0) Gecko/20100101 Firefox/25.0"
+        agent = "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:25.0)"\
+                "Gecko/20100101 Firefox/25.0"
         self.assertFalse(user_agents.is_android_webview(agent))
 
     def test_user_agent_chrome(self):
@@ -130,10 +148,12 @@ class AndroidUserAgentTestCase(WorkoutManagerTestCase):
         Tests vanilla chrome user agent
         '''
 
-        agent = "Mozilla/5.0 (Windows NT 6.2; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko)"\
+        agent = "Mozilla/5.0 (Windows NT 6.2; Win64; x64)"\
+                "AppleWebKit/537.36 (KHTML, like Gecko)"\
                 "Chrome/32.0.1667.0 Safari/537.36"
         self.assertFalse(user_agents.is_android_webview(agent))
 
-        agent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_0) AppleWebKit/537.36 (KHTML, like "\
+        agent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_0)"\
+                "AppleWebKit/537.36 (KHTML, like "\
                 "Gecko) Chrome/32.0.1664.3 Safari/537.36"
         self.assertFalse(user_agents.is_android_webview(agent))

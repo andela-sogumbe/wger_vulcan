@@ -38,8 +38,8 @@ logger = logging.getLogger(__name__)
 
 class WgerMultiplePermissionRequiredMixin(PermissionRequiredMixin):
     '''
-    A PermissionRequiredMixin that checks that the user has at least one permission
-    instead of all of them.
+    A PermissionRequiredMixin that checks that the user has at least one
+    permission instead of all of them.
     '''
 
     def has_permission(self):
@@ -61,8 +61,8 @@ class WgerPermissionMixin(object):
     '''
     The name of the permission required to access this class.
 
-    This can be a string or a tuple, in the latter case having any of the permissions
-    listed is enough to access the resource
+    This can be a string or a tuple, in the latter case having any of the
+    permissions listed is enough to access the resource
     '''
 
     login_required = False
@@ -90,10 +90,12 @@ class WgerPermissionMixin(object):
                     has_permission = True
 
                 if not has_permission:
-                    return HttpResponseForbidden('You are not allowed to access this object')
+                    return HttpResponseForbidden(
+                        'You are not allowed to access this object')
 
         # Dispatch normally
-        return super(WgerPermissionMixin, self).dispatch(request, *args, **kwargs)
+        return super(WgerPermissionMixin, self).dispatch(
+            request, *args, **kwargs)
 
 
 # , PermissionRequiredMixin
@@ -203,7 +205,8 @@ class WgerFormMixin(ModelFormMixin):
 
         # Nothing to see, please move along
         if owner_object and owner_object.user != self.request.user:
-            return HttpResponseForbidden('You are not allowed to access this object')
+            return HttpResponseForbidden(
+                'You are not allowed to access this object')
 
         # Dispatch normally
         return super(WgerFormMixin, self).dispatch(request, *args, **kwargs)
@@ -325,19 +328,22 @@ class TextTemplateView(TemplateView):
     '''
     A regular templateView that sets the mime type as text/plain
     '''
+
     def render_to_response(self, context, **response_kwargs):
         response_kwargs['content_type'] = 'text/plain'
-        return super(TextTemplateView, self).render_to_response(context, **response_kwargs)
+        return super(
+            TextTemplateView, self).render_to_response(context, **response_kwargs)
 
 
 class WebappManifestView(TemplateView):
     '''
-    A regular templateView that sets the mime type as application/x-web-app-manifest+json
-
+    A regular templateView that sets the mime type as application/
+    x-web-app-manifest+json
     This is used in the mozilla market place
     '''
     template_name = 'manifest.webapp'
 
     def render_to_response(self, context, **response_kwargs):
         response_kwargs['content_type'] = 'application/x-web-app-manifest+json'
-        return super(WebappManifestView, self).render_to_response(context, **response_kwargs)
+        return super(
+            WebappManifestView, self).render_to_response(context, **response_kwargs)
