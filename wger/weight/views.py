@@ -77,7 +77,8 @@ class WeightAddView(WgerFormMixin, CreateView):
         '''
         Return to overview with username
         '''
-        return reverse('weight:overview', kwargs={'username': self.object.user.username})
+        return reverse(
+            'weight:overview', kwargs={'username': self.object.user.username})
 
 
 class WeightUpdateView(WgerFormMixin, UpdateView):
@@ -89,7 +90,8 @@ class WeightUpdateView(WgerFormMixin, UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super(WeightUpdateView, self).get_context_data(**kwargs)
-        context['form_action'] = reverse('weight:edit', kwargs={'pk': self.object.id})
+        context['form_action'] = reverse(
+            'weight:edit', kwargs={'pk': self.object.id})
         context['title'] = _('Edit weight entry for the %s') % self.object.date
 
         return context
@@ -98,7 +100,8 @@ class WeightUpdateView(WgerFormMixin, UpdateView):
         '''
         Return to overview with username
         '''
-        return reverse('weight:overview', kwargs={'username': self.object.user.username})
+        return reverse(
+            'weight:overview', kwargs={'username': self.object.user.username})
 
 
 @login_required

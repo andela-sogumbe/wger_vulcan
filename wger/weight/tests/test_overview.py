@@ -49,7 +49,8 @@ class WeightExportCsvTestCase(WorkoutManagerTestCase):
 
     def csv_export(self):
         '''
-        Helper function to test exporting the saved weight entries as a CSV file
+        Helper function to test exporting the saved weight entries as a CSV
+        file
         '''
         response = self.client.get(reverse('weight:export-csv'))
 
@@ -60,7 +61,8 @@ class WeightExportCsvTestCase(WorkoutManagerTestCase):
 
     def test_csv_export_loged_in(self):
         '''
-        Test exporting the saved weight entries as a CSV file by a logged in user
+        Test exporting the saved weight entries as a CSV file by a logged in
+        user
         '''
         self.user_login('test')
         self.csv_export()
