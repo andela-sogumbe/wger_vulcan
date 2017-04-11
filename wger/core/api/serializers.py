@@ -23,7 +23,7 @@ from wger.core.models import (
     DaysOfWeek,
     License,
     RepetitionUnit,
-    WeightUnit)
+    WeightUnit,)
 
 
 class UserprofileSerializer(serializers.ModelSerializer):
