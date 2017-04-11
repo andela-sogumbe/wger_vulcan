@@ -23,7 +23,8 @@ from wger.core.models import (
     UserProfile,
     Language,
     DaysOfWeek,
-    License
+    License,
+    User
 )
 
 
@@ -77,3 +78,14 @@ class LicenseResource(ModelResource):
                      "full_name": ALL,
                      "short_name": ALL,
                      "url": ALL}
+
+
+class UsersResource(ModelResource):
+    '''
+    Resource for users
+    '''
+    class Meta:
+        queryset = User.objects.all()
+        filtering = {"id": ALL,
+                     "username": ALL,
+                     "email": ALL}

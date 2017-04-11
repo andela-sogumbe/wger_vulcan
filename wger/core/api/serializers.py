@@ -23,7 +23,8 @@ from wger.core.models import (
     DaysOfWeek,
     License,
     RepetitionUnit,
-    WeightUnit,)
+    WeightUnit,
+    User,)
 
 
 class UserprofileSerializer(serializers.ModelSerializer):
@@ -79,3 +80,12 @@ class WeightUnitSerializer(serializers.ModelSerializer):
     '''
     class Meta:
         model = WeightUnit
+
+
+class UserSerializer(serializers.ModelSerializer):
+    '''
+    User serializer
+    '''
+    class Meta:
+        model = User
+        fields = ("id", "username", "email",)

@@ -78,6 +78,7 @@ patterns_user = [
     url(r'^api-key$',
         user.api_key,
         name='api-key'),
+
     url(r'^demo-entries$',
         misc.demo_entries,
         name='demo-entries'),
