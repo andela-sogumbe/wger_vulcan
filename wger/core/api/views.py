@@ -16,6 +16,8 @@
 # along with Workout Manager.  If not, see <http://www.gnu.org/licenses/>.
 
 from django.contrib.auth.models import User
+from django.core.validators import validate_email
+from django import forms
 from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework.decorators import detail_route
@@ -26,7 +28,8 @@ from wger.core.models import (
     DaysOfWeek,
     License,
     RepetitionUnit,
-    WeightUnit,)
+    WeightUnit,
+    UserMetadata)
 from wger.core.api.serializers import (
     UsernameSerializer,
     LanguageSerializer,
@@ -37,6 +40,7 @@ from wger.core.api.serializers import (
     UserSerializer
 )
 from wger.core.api.serializers import UserprofileSerializer
+from wger.utils.helpers import password_generator
 from wger.utils.permissions import (
     UpdateOnlyPermission,
     WgerPermission,
@@ -150,4 +154,25 @@ class UserViewSet(viewsets.ModelViewSet):
         """
         Create a user from the request
         """
-        return Response({"creating": request.data["username"]})
+        if request.data["email"]:
+            try:
+                validate_email(request.data["email"])
+            except forms.ValidationError:
+                response = {"created": False,
+                            "message": "Invalid email"}
+                return Response(response)
+
+        email = User.objects.normalize_email(request.data["email"])
+        password = password_generator()
+        username = request.data["username"]
+
+        new_user = User.objects.create_user(username, email=email,
+                                            password=password)
+        metadata = UserMetadata(user=new_user.id,
+                                created_by=self.get_queryset()[0])
+        metadata.save()
+        response = {"created": True,
+                    "username": new_user.username,
+                    "email": new_user.email,
+                    "password": password}
+        return Response(response)
