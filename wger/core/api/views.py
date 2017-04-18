@@ -37,8 +37,10 @@ from wger.core.api.serializers import (
     UserSerializer
 )
 from wger.core.api.serializers import UserprofileSerializer
-from wger.utils.permissions import UpdateOnlyPermission, WgerPermission
-
+from wger.utils.permissions import (
+    UpdateOnlyPermission,
+    WgerPermission,
+    CreateOnlyPermission)
 
 class UserProfileViewSet(viewsets.ModelViewSet):
     '''
@@ -128,5 +130,24 @@ class UserViewSet(viewsets.ModelViewSet):
     '''
     API endpoint for user objects
     '''
-    queryset = User.objects.all().order_by('-date_joined')
+    is_private = True
+    permission_classes = (WgerPermission, CreateOnlyPermission, )
     serializer_class = UserSerializer
+
+    def get_owner_objects(self):
+        """
+        Return objects to check for ownership permission
+        """
+        return [(User, 'user')]
+
+    def get_queryset(self):
+        """
+        Return the authenticated user
+        """
+        return User.objects.filter(username=self.request.user)
+
+    def create(self, request, *args, **kwargs):
+        """
+        Create a user from the request
+        """
+        return Response({"creating": request.data["username"]})
