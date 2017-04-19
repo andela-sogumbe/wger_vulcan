@@ -19,6 +19,7 @@ from django.contrib.auth.models import User
 from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework.decorators import detail_route
+from rest_framework.throttling import UserRateThrottle
 
 from wger.core.models import (
     UserProfile,
@@ -137,6 +138,7 @@ class UserViewSet(viewsets.ModelViewSet):
     permission_classes = (WgerPermission, CreateOnlyPermission, )
     serializer_class = UserSerializer
     http_method_names = ['post']
+    throttle_classes = (UserRateThrottle,)
 
     def get_owner_objects(self):
         """
