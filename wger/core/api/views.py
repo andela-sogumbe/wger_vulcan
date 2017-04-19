@@ -154,25 +154,23 @@ class UserViewSet(viewsets.ModelViewSet):
         """
         Create a user from the request
         """
-        if request.data["email"]:
-            try:
-                validate_email(request.data["email"])
-            except forms.ValidationError:
-                response = {"created": False,
-                            "message": "Invalid email"}
-                return Response(response)
+        data = request.data
+        # Generate password for user if password was not put
+        if not data["password"]:
+            password = password_generator()
+            data["password"] = password
+        password = data["password"]
 
-        email = User.objects.normalize_email(request.data["email"])
-        password = password_generator()
-        username = request.data["username"]
+        serializer = UserSerializer(data=data)
 
-        new_user = User.objects.create_user(username, email=email,
-                                            password=password)
-        metadata = UserMetadata(user=new_user.id,
-                                created_by=self.get_queryset()[0])
-        metadata.save()
-        response = {"created": True,
-                    "username": new_user.username,
-                    "email": new_user.email,
-                    "password": password}
-        return Response(response)
+        if serializer.is_valid():
+            serializer.save()
+            data = serializer.data
+
+            # Save created user to usermetadata
+            metadata = UserMetadata(user=data["id"],
+                                    created_by=self.get_queryset()[0])
+            metadata.save()
+            data["password"] = password
+            return Response(data, status=201)
+        return Response(serializer.errors, status=400)
