@@ -138,7 +138,7 @@ class UserViewSet(viewsets.ModelViewSet):
     permission_classes = (WgerPermission, CreateOnlyPermission, )
     serializer_class = UserSerializer
     http_method_names = ['post']
-    throttle_classes = (UserRateThrottle,)
+    throttle_classes = (UserRateThrottle, )
 
     def get_owner_objects(self):
         """
