@@ -137,6 +137,7 @@ class UserViewSet(viewsets.ModelViewSet):
     is_private = True
     permission_classes = (WgerPermission, CreateOnlyPermission, )
     serializer_class = UserSerializer
+    http_method_names = ['post']
 
     def get_owner_objects(self):
         """
@@ -155,6 +156,7 @@ class UserViewSet(viewsets.ModelViewSet):
         Create a user from the request
         """
         data = request.data
+
         # Generate password for user if password was not put
         if not data["password"]:
             password = password_generator()
