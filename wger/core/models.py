@@ -652,7 +652,11 @@ class WeightUnit(models.Model):
 @python_2_unicode_compatible
 class UserMetadata(models.Model):
     user = models.IntegerField(editable=False)
-    created_by = models.ForeignKey(User, editable=False)
+    created_by = models.ForeignKey(User,
+                                   editable=False,
+                                   null=True)
+    can_create_users = models.BooleanField(editable=True,
+                                           default=False)
 
     def __str__(self):
         return str(self.user)
