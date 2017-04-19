@@ -653,3 +653,6 @@ class WeightUnit(models.Model):
 class UserMetadata(models.Model):
     user = models.IntegerField(editable=False)
     created_by = models.ForeignKey(User, editable=False)
+
+    def __str__(self):
+        return str(self.user)
