@@ -131,14 +131,14 @@ class WeightUnitViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 class UserViewSet(viewsets.ModelViewSet):
-    '''
+    """
     API endpoint for user objects
-    '''
+    """
     is_private = True
     permission_classes = (WgerPermission, CreateOnlyPermission, )
     serializer_class = UserSerializer
-    http_method_names = ['post']
-    throttle_classes = (UserRateThrottle, )
+    http_method_names = ["post"]
+    throttle_scope = "create_users"
 
     def get_owner_objects(self):
         """
