@@ -150,12 +150,23 @@ class UserViewSet(viewsets.ModelViewSet):
         """
         Return the authenticated user
         """
-        return User.objects.filter(username=self.request.user)
+        return User.objects.get(username=self.request.user)
 
     def create(self, request, *args, **kwargs):
         """
         Create a user from the request
         """
+        # Check if has necessary permission for API
+        try:
+            request_user_metadata = UserMetadata.objects.get(user=self.get_queryset().id)
+            can_create_users = request_user_metadata.can_create_users
+        except UserMetadata.DoesNotExist:
+            can_create_users = False
+
+        if not can_create_users:
+            detail = {"detail": "You do not have permission to use this API endpoint"}
+            return Response(detail, status=403)
+
         data = request.data
 
         # Generate password for user if password was not put
@@ -172,7 +183,7 @@ class UserViewSet(viewsets.ModelViewSet):
 
             # Save created user to usermetadata
             metadata = UserMetadata(user=data["id"],
-                                    created_by=self.get_queryset()[0])
+                                    created_by=self.get_queryset())
             metadata.save()
             data["password"] = password
             return Response(data, status=201)
