@@ -148,6 +148,7 @@ patterns_exercise = [
 ]
 
 urlpatterns = [
+    url(r'^information/', include(patterns_muscle, namespace="information")),
     url(r'^muscle/', include(patterns_muscle, namespace="muscle")),
     url(r'^image/', include(patterns_images, namespace="image")),
     url(r'^comment/', include(patterns_comment, namespace="comment")),

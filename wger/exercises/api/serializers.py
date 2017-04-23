@@ -78,3 +78,17 @@ class MuscleSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Muscle
+
+
+class ExerciseInformationSerializer(serializers.ModelSerializer):
+    """
+    Exercise Information serializer
+    """
+    class Meta:
+        model = Exercise
+        name = serializers.CharField(read_only=True)
+        category = ExerciseCategorySerializer(read_only=True)
+        equipment = EquipmentSerializer(read_only=True)
+        description = serializers.CharField(read_only=True)
+        muscles = MuscleSerializer(read_only=True)
+        muscles_secondary = MuscleSerializer(read_only=True)
