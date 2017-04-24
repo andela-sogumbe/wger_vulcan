@@ -29,6 +29,7 @@ from django.core.cache import cache
 from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
 from django.utils.encoding import python_2_unicode_compatible
+from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
 from django.utils import translation
 from django.conf import settings
@@ -623,14 +624,18 @@ class MealItem(models.Model):
 
         :param use_metric Flag that controls the units used
         """
-        nutritional_info = {'energy': 0,
-                            'protein': 0,
-                            'carbohydrates': 0,
-                            'carbohydrates_sugar': 0,
-                            'fat': 0,
-                            'fat_saturated': 0,
-                            'fibres': 0,
-                            'sodium': 0}
+        nutritional_info = cache.get('cache_nutrition')
+        if not nutritional_info:
+            nutritional_info = {'energy': 0,
+                                'protein': 0,
+                                'carbohydrates': 0,
+                                'carbohydrates_sugar': 0,
+                                'fat': 0,
+                                'fat_saturated': 0,
+                                'fibres': 0,
+                                'sodium': 0}
+            cache.set('cache_nutrition', nutritional_info)
+
         # Calculate the base weight of the item
         if self.get_unit_type() == MEALITEM_WEIGHT_GRAM:
             item_weight = self.amount
@@ -674,3 +679,11 @@ class MealItem(models.Model):
             nutritional_info[i] = Decimal(nutritional_info[i]).quantize(TWOPLACES)
 
         return nutritional_info
+
+    def save(self, *args, **kwargs):
+        """
+        Reset the cache
+        """
+        super(MealItem, self).save(*args, **kwargs)
+
+        cache.delete('cache_nutrition')
