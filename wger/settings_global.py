@@ -84,6 +84,9 @@ INSTALLED_APPS = (
 
     # django-bower for installing bower packages
     'djangobower',
+
+    # Social Auth
+    'social_django',
 )
 
 # added list of external libraries to be installed by bower
@@ -123,12 +126,34 @@ MIDDLEWARE_CLASSES = (
     # Django mobile
     'django_mobile.middleware.MobileDetectionMiddleware',
     'django_mobile.middleware.SetFlavourMiddleware',
+
+    # Social Login
+    'social_django.middleware.SocialAuthExceptionMiddleware',
 )
 
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
-    'wger.utils.helpers.EmailAuthBackend'
+    'wger.utils.helpers.EmailAuthBackend',
+    'social_core.backends.google.GoogleOAuth2',
+    'social_core.backends.twitter.TwitterOAuth',
+    'social_core.backends.facebook.FacebookOAuth2',
+
 )
+
+# Google Authentication
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '957899058036-qh6cbl2fn6l10e27bbg3dh3vc2o2ulmm.apps.googleusercontent.com'
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'XJjXPc0XAbTqWeLvEdaeNIml'
+SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = []
+
+# Twitter Authentication
+SOCIAL_AUTH_TWITTER_KEY = 'nk09HIRVtqnDKbhefD9Z4y6GR'
+SOCIAL_AUTH_TWITTER_SECRET = '2W7GTFKd644OvpK1M2hMqvT4IG3HcYiNGpqzWHnys4bAfYh6h7'
+
+# Facebook Authentication
+SOCIAL_AUTH_FACEBOOK_KEY = '1343519385685769'
+SOCIAL_AUTH_FACEBOOK_SECRET = 'fe9689e3f8117439c0fae6d5a6d6f402'
+SOCIAL_AUTH_FACEBOOK_SCOPE = ['email']
+SOCIAL_AUTH_FACEBOOK_API_VERSION = '2.9'
 
 TEMPLATES = [
     {
@@ -137,6 +162,8 @@ TEMPLATES = [
         'OPTIONS': {
             'context_processors': [
                 'wger.utils.context_processor.processor',
+                'social_django.context_processors.backends',
+                'social_django.context_processors.login_redirect',
 
                 # Django
                 'django.contrib.auth.context_processors.auth',
@@ -335,3 +362,16 @@ WGER_SETTINGS = {
     'EMAIL_FROM': 'wger Workout Manager <wger@example.com>',
     'TWITTER': False
 }
+
+SOCIAL_AUTH_URL_NAMESPACE = 'social'
+SOCIAL_AUTH_PIPELINE = (
+    'social_core.pipeline.social_auth.social_details',
+    'social_core.pipeline.social_auth.social_uid',
+    'social_core.pipeline.social_auth.social_user',
+    'social_core.pipeline.user.get_username',
+    'social_core.pipeline.user.create_user',
+    'social_core.pipeline.social_auth.associate_user',
+    'social_core.pipeline.social_auth.load_extra_data',
+    'social_core.pipeline.user.user_details',
+    'social_core.pipeline.social_auth.associate_by_email',
+)

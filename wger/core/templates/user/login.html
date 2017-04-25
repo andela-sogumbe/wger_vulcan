@@ -14,6 +14,9 @@
     {% trans 'Login' as submit_text %}
     {% render_form_fields form submit_text %}
 </form>
+<a href="{% url "social:begin" "google-oauth2" %}{% if next %}?next={{next}}{% endif %}"><i class='fa fa-google fa-2x'></i></a>
+<a href="{% url "social:begin" "twitter" %}{% if next %}?next={{next}}{% endif %}"><i class='fa fa-twitter fa-2x'></i></a>
+<a href="{% url "social:begin" "facebook" %}{% if next %}?next={{next}}{% endif %}"><i class='fa fa-facebook fa-2x'></i></a>
 {% endblock %}
 
 
