@@ -33,6 +33,8 @@ from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
 from django.utils import translation
 from django.conf import settings
+from django.dispatch import receiver
+from django.db.models.signals import post_save, post_delete
 
 from wger.core.models import Language
 from wger.utils.constants import TWOPLACES
@@ -624,17 +626,14 @@ class MealItem(models.Model):
 
         :param use_metric Flag that controls the units used
         """
-        nutritional_info = cache.get('cache_nutrition')
-        if not nutritional_info:
-            nutritional_info = {'energy': 0,
-                                'protein': 0,
-                                'carbohydrates': 0,
-                                'carbohydrates_sugar': 0,
-                                'fat': 0,
-                                'fat_saturated': 0,
-                                'fibres': 0,
-                                'sodium': 0}
-            cache.set('cache_nutrition', nutritional_info)
+        nutritional_info = {'energy': 0,
+                            'protein': 0,
+                            'carbohydrates': 0,
+                            'carbohydrates_sugar': 0,
+                            'fat': 0,
+                            'fat_saturated': 0,
+                            'fibres': 0,
+                            'sodium': 0}
 
         # Calculate the base weight of the item
         if self.get_unit_type() == MEALITEM_WEIGHT_GRAM:
@@ -680,10 +679,16 @@ class MealItem(models.Model):
 
         return nutritional_info
 
-    def save(self, *args, **kwargs):
-        """
-        Reset the cache
-        """
-        super(MealItem, self).save(*args, **kwargs)
 
-        cache.delete('cache_nutrition')
+@receiver(post_save, sender=NutritionPlan)
+@receiver(post_delete, sender=NutritionPlan)
+@receiver(post_save, sender=Meal)
+@receiver(post_delete, sender=Meal)
+@receiver(post_save, sender=MealItem)
+@receiver(post_delete, sender=MealItem)
+def cache_nutrition_info(sender, **kwargs):
+    nutritional_info = sender.get_nutritional_values()
+
+    cache_nutritional_info = cache.get('cached_nutrition_info')
+    if not cache_nutritional_info:
+        cache.set('cached_nutritional_info', nutritional_info)
