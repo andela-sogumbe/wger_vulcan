@@ -14,9 +14,19 @@
     {% trans 'Login' as submit_text %}
     {% render_form_fields form submit_text %}
 </form>
-<a href="{% url "social:begin" "google-oauth2" %}{% if next %}?next={{next}}{% endif %}"><i class='fa fa-google fa-2x'></i></a>
-<a href="{% url "social:begin" "twitter" %}{% if next %}?next={{next}}{% endif %}"><i class='fa fa-twitter fa-2x'></i></a>
-<a href="{% url "social:begin" "facebook" %}{% if next %}?next={{next}}{% endif %}"><i class='fa fa-facebook fa-2x'></i></a>
+<div class='col-md-10 col-md-push-2 text-center'>
+    <h4>You can also log in with:</h4>
+</br>
+    <div class='col-md-4'>
+        <a href="{% url "social:begin" "google-oauth2" %}{% if next %}?next={{next}}{% endif %}"><i class='fa fa-google fa-2x'></i></a>
+    </div>
+    <div class='col-md-4'>
+        <a href="{% url "social:begin" "twitter" %}{% if next %}?next={{next}}{% endif %}"><i class='fa fa-twitter fa-2x'></i></a>
+    </div>
+    <div class='col-md-4'>
+        <a href="{% url "social:begin" "facebook" %}{% if next %}?next={{next}}{% endif %}"><i class='fa fa-facebook fa-2x'></i></a>
+    </div>
+</div>
 {% endblock %}
 
 
