@@ -647,3 +647,12 @@ class WeightUnit(models.Model):
         This is done basically to not litter the code with magic IDs
         '''
         return self.id in (1, 2)
+
+@python_2_unicode_compatible
+class FitBitAppDetails(models.Model):
+    client_id = models.CharField(verbose_name=_('OAuth 2.0 ClientID'),
+                                 editable=False,
+                                 max_length=300)
+    client_secret = models.CharField(verbose_name=_('Client Secret'),
+                                     editable=False,
+                                     max_length=300)
