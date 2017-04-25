@@ -222,9 +222,3 @@ class ExerciseInformationViewSet(viewsets.ReadOnlyModelViewSet):
                      'muscles_secondary',
                      'name',
                      'equipment')
-
-    def exercise_information(request):
-        if request.method == 'GET':
-            queryset = Exercise.objects.all()
-            serializer = ExerciseInformationSerializer(queryset, many=True)
-            return JsonResponse(serializer.data, safe=False)
