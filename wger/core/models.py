@@ -648,11 +648,61 @@ class WeightUnit(models.Model):
         '''
         return self.id in (1, 2)
 
+
 @python_2_unicode_compatible
 class FitBitAppDetails(models.Model):
+    '''Contains authorisation information of the fitbit application'''
     client_id = models.CharField(verbose_name=_('OAuth 2.0 ClientID'),
                                  editable=False,
                                  max_length=300)
     client_secret = models.CharField(verbose_name=_('Client Secret'),
                                      editable=False,
                                      max_length=300)
+
+
+@python_2_unicode_compatible
+class UserFitBitDetails(models.Model):
+    '''Contains fitbit access information of a user'''
+    user = models.OneToOneField(User,
+                                editable=False)
+    access_token = models.CharField(max_length=400,
+                                    unique=True)
+    refresh_token = models.CharField(max_length=400,
+                                     unique=True)
+    enabled_fitbit = models.BooleanField(default=False)
+
+    def __str__(self):
+        '''Return a human readable representation'''
+        return self.access_token
+
+    def get_owner_object(self):
+        '''
+        Returns the object that has owner information
+        '''
+        return self
+
+
+@python_2_unicode_compatible
+class UserFitBitScope(models.Model):
+    '''Has all information of what the user has authorized from fitbit'''
+    user = models.OneToOneField(User,
+                                editable=False)
+    activity = models.BooleanField(default=False)
+    heartrate = models.BooleanField(default=False)
+    location = models.BooleanField(default=False)
+    nutrition = models.BooleanField(default=False)
+    profile = models.BooleanField(default=False)
+    settings = models.BooleanField(default=False)
+    sleep = models.BooleanField(default=False)
+    social = models.BooleanField(default=False)
+    weight = models.BooleanField(default=False)
+
+    def __str__(self):
+        '''Return a human readable representation'''
+        return self.weight
+
+    def get_owner_object(self):
+        '''
+        Returns the object that has owner information
+        '''
+        return self
