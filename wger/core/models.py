@@ -669,6 +669,8 @@ class UserFitBitDetails(models.Model):
                                     unique=True)
     refresh_token = models.CharField(max_length=400,
                                      unique=True)
+    fitbit_user_id = models.CharField(max_length=400,
+                                      unique=True)
     enabled_fitbit = models.BooleanField(default=False)
 
     def __str__(self):
