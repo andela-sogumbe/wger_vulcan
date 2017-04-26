@@ -16,8 +16,10 @@
 
 import logging
 from urllib.parse import urlencode, quote
+from base64 import b64encode
+import requests
+import json
 
-from django.conf import settings
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.core.exceptions import ObjectDoesNotExist
@@ -36,7 +38,10 @@ from django.conf import settings
 
 from wger.core.forms import FeedbackRegisteredForm, FeedbackAnonymousForm
 from wger.core.demo import create_demo_entries, create_temporary_user
-from wger.core.models import DaysOfWeek, UserFitBitDetails, FitBitAppDetails
+from wger.core.models import (DaysOfWeek,
+                              FitBitAppDetails,
+                              UserFitBitDetails,
+                              UserFitBitScope,)
 from wger.manager.models import Schedule
 from wger.nutrition.models import NutritionPlan
 from wger.weight.models import WeightEntry
@@ -142,7 +147,7 @@ def dashboard(request):
 
     # Check if user has authorized fitbit, if not button will be
     # added in the template
-    fitbit_details = UserFitBitDetails.objects.filter(user=request.user,
+    fitbit_details = UserFitBitDetails.objects.filter(wger_user_id=request.user,
                                                       enabled_fitbit=True).first()
     if fitbit_details:
         template_data["has_fitbit"] = True
@@ -164,7 +169,48 @@ def dashboard(request):
         fitbit_auth_url = "https://www.fitbit.com/oauth2/authorize?" + params
         template_data["fitbit_auth_url"] = fitbit_auth_url
 
-    # If redirecting from fitbit authorisation page, get the access token
+        # If redirecting from fitbit authorisation page, get the access token
+        # you should probably check referers in the future
+        auth_code = request.GET.get("code")
+        if auth_code:
+            fitbit_app = FitBitAppDetails.objects.all().first()
+            raw_auth_header = fitbit_app.client_id + ":" + fitbit_app.client_secret
+
+            # Base 64 encode for authorization header
+            auth_header = "Basic " + b64encode(raw_auth_header.encode()).decode()
+
+            headers = {"Authorization": auth_header}
+            params = {"code": auth_code,
+                      "grant_type": "authorization_code",
+                      "client_id": fitbit_app.client_id,
+                      "redirect_uri": redirect_uri}
+
+            access_url = "https://api.fitbit.com/oauth2/token"
+            access_request = requests.post(access_url,
+                                           data=params,
+                                           headers=headers)
+
+            if access_request.status_code == 200:
+                data = access_request.json()
+                user_fitbit_data = {"wger_user_id": request.user,
+                                    "user_id": data["user_id"],
+                                    "access_token": data["access_token"],
+                                    "refresh_token": data["refresh_token"],
+                                    "enabled_fitbit": True}
+                UserFitBitDetails.objects.create(**user_fitbit_data)
+
+                scopes_returned = data["scope"]
+
+                scopes_check = ["activity", "nutrition", "heartrate",
+                                "location", "nutrition", "profile",
+                                "settings", "sleep", "social", "weight"]
+                user_scope = {"user": request.user}
+                for scope in scopes_check:
+                    if scope in scopes_returned:
+                        user_scope[scope] = True
+
+                UserFitBitScope.objects.create(**user_scope)
+                template_data["has_fitbit"] = True
 
     return render(request, 'index.html', template_data)
 
