@@ -18,7 +18,6 @@ import logging
 from urllib.parse import urlencode, quote
 from base64 import b64encode
 import requests
-import json
 
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
@@ -33,8 +32,6 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login as django_login
 from django.template.loader import render_to_string
 from django.conf import settings
-
-
 
 from wger.core.forms import FeedbackRegisteredForm, FeedbackAnonymousForm
 from wger.core.demo import create_demo_entries, create_temporary_user
@@ -165,6 +162,7 @@ def dashboard(request):
                   "redirect_uri": redirect_uri,
                   "scope": " ".join(scope)}
 
+        # Set url for 'sync with fitbit button'
         params = urlencode(params, quote_via=quote)
         fitbit_auth_url = "https://www.fitbit.com/oauth2/authorize?" + params
         template_data["fitbit_auth_url"] = fitbit_auth_url
@@ -173,7 +171,6 @@ def dashboard(request):
         # you should probably check referers in the future
         auth_code = request.GET.get("code")
         if auth_code:
-            fitbit_app = FitBitAppDetails.objects.all().first()
             raw_auth_header = fitbit_app.client_id + ":" + fitbit_app.client_secret
 
             # Base 64 encode for authorization header
@@ -186,6 +183,7 @@ def dashboard(request):
                       "redirect_uri": redirect_uri}
 
             access_url = "https://api.fitbit.com/oauth2/token"
+            # Get user access_token and refresh_token
             access_request = requests.post(access_url,
                                            data=params,
                                            headers=headers)
@@ -201,13 +199,10 @@ def dashboard(request):
 
                 scopes_returned = data["scope"]
 
-                scopes_check = ["activity", "nutrition", "heartrate",
-                                "location", "nutrition", "profile",
-                                "settings", "sleep", "social", "weight"]
                 user_scope = {"user": request.user}
-                for scope in scopes_check:
-                    if scope in scopes_returned:
-                        user_scope[scope] = True
+                for scope_to_check in scope:
+                    if scope_to_check in scopes_returned:
+                        user_scope[scope_to_check] = True
 
                 UserFitBitScope.objects.create(**user_scope)
                 template_data["has_fitbit"] = True
