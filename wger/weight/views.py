@@ -39,6 +39,7 @@ from formtools.preview import FormPreview
 
 from wger.weight.forms import WeightForm
 from wger.weight.models import WeightEntry
+from wger.core.models import UserFitBitDetails, UserFitBitScope
 from wger.weight import helpers
 from wger.utils.helpers import check_access
 from wger.utils.generic_views import WgerFormMixin
@@ -63,6 +64,18 @@ class WeightAddView(WgerFormMixin, CreateView):
         Read the comment on weight/models.py WeightEntry about why we need
         to pass the user here.
         '''
+
+        # Check if user has authorised fitbit
+        fitbit_details = UserFitBitDetails.objects.filter(
+            wger_user_id=self.request.user).first()
+        fitbit_scope = UserFitBitScope.objects.filter(
+            user=self.request.user).first()
+
+        if fitbit_details and \
+            fitbit_details.enabled_fitbit and \
+                fitbit_scope.weight:
+            self.fitbit_weight_applies = True
+
         return {'user': self.request.user,
                 'date': datetime.date.today()}
 
