@@ -15,6 +15,7 @@
 # You should have received a copy of the GNU Affero General Public License
 
 import logging
+from urllib.parse import urlencode, quote
 
 from django.conf import settings
 from django.shortcuts import render
@@ -29,11 +30,13 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login as django_login
 from django.template.loader import render_to_string
+from django.conf import settings
+
 
 
 from wger.core.forms import FeedbackRegisteredForm, FeedbackAnonymousForm
 from wger.core.demo import create_demo_entries, create_temporary_user
-from wger.core.models import DaysOfWeek
+from wger.core.models import DaysOfWeek, UserFitBitDetails, FitBitAppDetails
 from wger.manager.models import Schedule
 from wger.nutrition.models import NutritionPlan
 from wger.weight.models import WeightEntry
@@ -135,6 +138,33 @@ def dashboard(request):
 
         # Load the nutritional info
         template_data['nutritional_info'] = plan.get_nutritional_values()
+
+
+    # Check if user has authorized fitbit, if not button will be
+    # added in the template
+    fitbit_details = UserFitBitDetails.objects.filter(user=request.user,
+                                                      enabled_fitbit=True).first()
+    if fitbit_details:
+        template_data["has_fitbit"] = True
+    else:
+        template_data["has_fitbit"] = False
+        fitbit_app = FitBitAppDetails.objects.all().first()
+        site_uri = settings.SITE_URL.replace("localhost",
+                                             "127.0.0.1")
+        redirect_uri = site_uri + reverse("core:dashboard")
+        scope = ["activity", "nutrition", "heartrate", "location", "nutrition",
+                 "profile", "settings", "sleep", "social", "weight"]
+
+        params = {"response_type": "code",
+                  "client_id": fitbit_app.client_id,
+                  "redirect_uri": redirect_uri,
+                  "scope": " ".join(scope)}
+
+        params = urlencode(params, quote_via=quote)
+        fitbit_auth_url = "https://www.fitbit.com/oauth2/authorize?" + params
+        template_data["fitbit_auth_url"] = fitbit_auth_url
+
+    # If redirecting from fitbit authorisation page, get the access token
 
     return render(request, 'index.html', template_data)
 

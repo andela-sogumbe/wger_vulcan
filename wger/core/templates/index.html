@@ -13,6 +13,13 @@
 
 
 {% block content %}
+{% if has_fitbit %}
+{% else %}
+<div class="">
+    <a href="{{ fitbit_auth_url }}"><button class="btn btn-success">Sync with Fitbit</button></a>
+</div>
+{% endif %}
+
 {% if current_workout %}
 <div class="modal fade" id="calendar-day-select-popup">
     <div class="modal-dialog">
