@@ -138,6 +138,11 @@ class WgerFormMixin(ModelFormMixin):
     A message to display on sucess
     '''
 
+    fitbit_weight_applies = False
+    '''
+    Determine if button to get weight from fitbit should be displayed
+    '''
+
     def get_context_data(self, **kwargs):
         '''
         Set necessary template data to correctly render the form
@@ -174,6 +179,9 @@ class WgerFormMixin(ModelFormMixin):
         # Template to extend. For AJAX requests we don't need the rest of the
         # template, only the form
         context['extend_template'] = 'base_empty.html' if self.request.is_ajax() else 'base.html'
+
+        # Determine if get weight from fitbit button should be displayed
+        context['fitbit_weight_applies'] = self.fitbit_weight_applies
 
         return context
 
