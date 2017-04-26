@@ -23,7 +23,8 @@ from wger.core.models import (
     DaysOfWeek,
     License,
     RepetitionUnit,
-    WeightUnit)
+    WeightUnit,
+    UserFitBitDetails)
 
 
 class UserprofileSerializer(serializers.ModelSerializer):
@@ -79,3 +80,12 @@ class WeightUnitSerializer(serializers.ModelSerializer):
     '''
     class Meta:
         model = WeightUnit
+
+
+class UserFitBitDetailsSerializer(serializers.ModelSerializer):
+    '''
+    UserFitBitDetails serializer
+    '''
+    class Meta:
+        model = UserFitBitDetails
+        fields = ("access_token", "refresh_token", "user_id")
