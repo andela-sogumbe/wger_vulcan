@@ -2,6 +2,7 @@
 from django.contrib.auth.models import User
 from wger.core.tests.base_testcase import WorkoutManagerTestCase
 from wger.core.tests.api_base_test import ApiPostTestCase
+from wger.core.views.user import *
 
 
 class CreateUserApiTestCase(WorkoutManagerTestCase, ApiPostTestCase):
