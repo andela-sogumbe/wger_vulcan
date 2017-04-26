@@ -663,14 +663,15 @@ class FitBitAppDetails(models.Model):
 @python_2_unicode_compatible
 class UserFitBitDetails(models.Model):
     '''Contains fitbit access information of a user'''
-    user = models.OneToOneField(User,
+    wger_user_id = models.OneToOneField(User,
                                 editable=False)
+    # fitbit user id
+    user_id = models.CharField(max_length=400,
+                                      unique=True)
     access_token = models.CharField(max_length=400,
                                     unique=True)
     refresh_token = models.CharField(max_length=400,
                                      unique=True)
-    fitbit_user_id = models.CharField(max_length=400,
-                                      unique=True)
     enabled_fitbit = models.BooleanField(default=False)
 
     def __str__(self):
