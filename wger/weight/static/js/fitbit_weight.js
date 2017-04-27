@@ -35,13 +35,13 @@ function callFitbitWeightApi(){
   success: function (data, textStatus, jqXHR) {
      $weightField = $("#id_weight")
      // Set weight value from fitbit
-     if (data.weight.length){
+     if (data.weight.length > 0){
        $weightField.val(data.weight[0].weight)
+       $fitbitAjaxLoader.html("");
      }
      else{
-       $fitbitAjaxLoader.text("You did not log any data on" + weightDate)
+       $fitbitAjaxLoader.text("You did not log any data on " + weightDate)
      }
-     $fitbitAjaxLoader.html("");
      $getFitbitWeightBtn.removeClass("hidden");
   },
   error: function (data, textStatus, jqXHR) {
