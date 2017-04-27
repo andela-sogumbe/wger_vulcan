@@ -60,6 +60,7 @@ class WeightAddView(WgerFormMixin, CreateView):
     form_class = WeightForm
     title = ugettext_lazy('Add weight entry')
     form_action = reverse_lazy('weight:add')
+    custom_js = ''
 
     def get_initial(self):
         '''
@@ -70,6 +71,7 @@ class WeightAddView(WgerFormMixin, CreateView):
         '''
 
         # Check if user has authorised fitbit
+        # TODO: Consider moving whole fitbit logic to different function
         fitbit_details = UserFitBitDetails.objects.filter(
             wger_user_id=self.request.user).first()
         fitbit_scope = UserFitBitScope.objects.filter(
@@ -82,7 +84,7 @@ class WeightAddView(WgerFormMixin, CreateView):
             now = datetime.timestamp(datetime.now())
             expires_in = datetime.timestamp(fitbit_details.expires_in)
 
-            if expires_in > now:
+            if expires_in < now:
                 # token expired, get new one
                 client_details = FitBitAppDetails.objects.all().first()
                 raw_auth_header = client_details.client_id + ":" + \

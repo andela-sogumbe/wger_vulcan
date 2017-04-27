@@ -143,6 +143,9 @@ class WgerFormMixin(ModelFormMixin):
     Determine if button to get weight from fitbit should be displayed
     '''
     fitbit_access_tokens = ''
+    '''
+    Fitbit access token
+    '''
 
     def get_context_data(self, **kwargs):
         '''

@@ -2,12 +2,14 @@
 function prepFitbitWeightApiCall(){
   $getFitbitWeightBtn = $("#fitbit-weight-btn");
   if ($getFitbitWeightBtn.length){
-    $getFitbitWeightBtn.click(function(){
+    $getFitbitWeightBtn.click(function(e){
+        e.preventDefault()
         callFitbitWeightApi()
     });
   }
 }
 
+// Call Fitbit API
 function callFitbitWeightApi(){
   $getFitbitWeightBtn.addClass("hidden");
   $fitbitAjaxLoader = $("#fitbit-ajax-loader");
@@ -25,7 +27,7 @@ function callFitbitWeightApi(){
   url: "https://api.fitbit.com/1/user/" +
     userFitbitTokens[2]+
       "/body/log/weight/date/" + weightDate + ".json",
-  beforeSend: function (jqXHR) {
+    beforeSend: function (jqXHR) {
     access_token = userFitbitTokens[0]
     refresh_token = userFitbitTokens[1]
     jqXHR.setRequestHeader('Authorization', 'Bearer ' + access_token);
@@ -33,7 +35,12 @@ function callFitbitWeightApi(){
   success: function (data, textStatus, jqXHR) {
      $weightField = $("#id_weight")
      // Set weight value from fitbit
-     $weightField.val(data.weight[0].weight)
+     if (data.weight.length){
+       $weightField.val(data.weight[0].weight)
+     }
+     else{
+       $fitbitAjaxLoader.text("You did not log any data on" + weightDate)
+     }
      $fitbitAjaxLoader.html("");
      $getFitbitWeightBtn.removeClass("hidden");
   },
@@ -45,4 +52,7 @@ function callFitbitWeightApi(){
 });
 }
 
-prepFitbitWeightApiCall()
+// Wait till document is ready to execute
+$(document).ready(function(){
+  prepFitbitWeightApiCall()
+});

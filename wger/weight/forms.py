@@ -48,3 +48,6 @@ class WeightForm(ModelForm):
         widgets = {
             'user': widgets.HiddenInput(),
         }
+
+    class Media:
+        js = ('js/fitbit_weight.js',)
