@@ -188,12 +188,13 @@ def dashboard(request):
             access_request = requests.post(access_url,
                                            data=params,
                                            headers=headers)
-            current_timestamp = datetime.timestamp(datetime.now())
-            expiry_timestamp = current_timestamp + data["expires_in"]
-            expires_in = datetime.fromtimestamp(expiry_timestamp)
 
             if access_request.status_code == 200:
                 data = access_request.json()
+                current_timestamp = datetime.timestamp(datetime.now())
+                expiry_timestamp = current_timestamp + data["expires_in"]
+                expires_in = datetime.fromtimestamp(expiry_timestamp)
+
                 user_fitbit_data = {"wger_user_id": request.user,
                                     "user_id": data["user_id"],
                                     "access_token": data["access_token"],
