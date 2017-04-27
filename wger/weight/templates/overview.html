@@ -10,6 +10,9 @@
 {# Header #}
 {#        #}
 {% block header %}
+{% if has_fitbit %}
+<script src="{% static 'js/fitbit_weight.js' %}"></script>
+{% endif %}
 <script src="{% static 'js/weight.js' %}"></script>
 {% endblock %}
 

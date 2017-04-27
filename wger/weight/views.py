@@ -171,6 +171,18 @@ def overview(request, username=None):
     template_data['owner_user'] = user
     template_data['show_shariff'] = is_owner
     template_data['last_five_weight_entries_details'] = last_weight_entries
+
+    # Check if user has authorised fitbit weight
+    fitbit_details = UserFitBitDetails.objects.filter(
+        wger_user_id=request.user).first()
+    fitbit_scope = UserFitBitScope.objects.filter(
+        user=request.user).first()
+
+    if fitbit_details and \
+        fitbit_details.enabled_fitbit and \
+        fitbit_scope.weight:
+        template_data['has_fitbit'] = True
+
     return render(request, 'overview.html', template_data)
 
 
