@@ -74,6 +74,14 @@ class WeightAddView(WgerFormMixin, CreateView):
         if fitbit_details and \
             fitbit_details.enabled_fitbit and \
                 fitbit_scope.weight:
+            # Check if token has expired
+            now = datetime.timestamp(datetime.now())
+            expires_in = ddatetime.timestamp(fitbit_details.expires_in)
+
+            if expires_in > now:
+                # token expired, get new one
+                pass
+
             self.fitbit_weight_applies = True
             self.fitbit_access_tokens = fitbit_details.access_token + " " + \
                 fitbit_details.refresh_token + " " + fitbit_details.user_id

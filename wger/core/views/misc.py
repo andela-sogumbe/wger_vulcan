@@ -18,6 +18,7 @@ import logging
 from urllib.parse import urlencode, quote
 from base64 import b64encode
 import requests
+from datetime import datetime
 
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
@@ -187,6 +188,9 @@ def dashboard(request):
             access_request = requests.post(access_url,
                                            data=params,
                                            headers=headers)
+            current_timestamp = datetime.timestamp(datetime.now())
+            expiry_timestamp = current_timestamp + data["expires_in"]
+            expires_in = datetime.fromtimestamp(expiry_timestamp)
 
             if access_request.status_code == 200:
                 data = access_request.json()
@@ -194,7 +198,8 @@ def dashboard(request):
                                     "user_id": data["user_id"],
                                     "access_token": data["access_token"],
                                     "refresh_token": data["refresh_token"],
-                                    "enabled_fitbit": True}
+                                    "enabled_fitbit": True,
+                                    "expires_in": expires_in}
                 UserFitBitDetails.objects.create(**user_fitbit_data)
 
                 scopes_returned = data["scope"]
