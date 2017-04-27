@@ -146,7 +146,7 @@ def dashboard(request):
     # added in the template
     fitbit_details = UserFitBitDetails.objects.filter(wger_user_id=request.user,
                                                       enabled_fitbit=True).first()
-    if fitbit_details:
+    if fitbit_details and fitbit_details.enabled_fitbit:
         template_data["has_fitbit"] = True
     else:
         template_data["has_fitbit"] = False
