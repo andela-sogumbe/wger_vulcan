@@ -75,6 +75,8 @@ class WeightAddView(WgerFormMixin, CreateView):
             fitbit_details.enabled_fitbit and \
                 fitbit_scope.weight:
             self.fitbit_weight_applies = True
+            self.fitbit_access_tokens = fitbit_details.access_token + " " + \
+                fitbit_details.refresh_token + " " + fitbit_details.user_id
 
         return {'user': self.request.user,
                 'date': datetime.date.today()}
