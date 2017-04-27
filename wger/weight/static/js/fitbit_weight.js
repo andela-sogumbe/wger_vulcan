@@ -31,9 +31,9 @@ function callFitbitWeightApi(){
     jqXHR.setRequestHeader('Authorization', 'Bearer ' + access_token);
   },
   success: function (data, textStatus, jqXHR) {
-     alert("reached");
-     console.log(data);
-     console.log(textStatus);
+     $weightField = $("#id_weight")
+     // Set weight value from fitbit
+     $weightField.val(data.weight[0].weight)
      $fitbitAjaxLoader.html("");
      $getFitbitWeightBtn.removeClass("hidden");
   },
