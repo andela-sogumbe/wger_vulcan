@@ -16,7 +16,9 @@
 
 import logging
 import csv
-import datetime
+from datetime import datetime, date
+import requests
+from base64 import b64encode
 
 from django.shortcuts import render
 from django.http import HttpResponse
@@ -39,7 +41,9 @@ from formtools.preview import FormPreview
 
 from wger.weight.forms import WeightForm
 from wger.weight.models import WeightEntry
-from wger.core.models import UserFitBitDetails, UserFitBitScope
+from wger.core.models import (UserFitBitDetails,
+                              UserFitBitScope,
+                              FitBitAppDetails)
 from wger.weight import helpers
 from wger.utils.helpers import check_access
 from wger.utils.generic_views import WgerFormMixin
@@ -76,18 +80,45 @@ class WeightAddView(WgerFormMixin, CreateView):
                 fitbit_scope.weight:
             # Check if token has expired
             now = datetime.timestamp(datetime.now())
-            expires_in = ddatetime.timestamp(fitbit_details.expires_in)
+            expires_in = datetime.timestamp(fitbit_details.expires_in)
 
             if expires_in > now:
                 # token expired, get new one
-                pass
+                client_details = FitBitAppDetails.objects.all().first()
+                raw_auth_header = client_details.client_id + ":" + \
+                    client_details.client_secret
+                auth_header = "Basic " + b64encode(
+                    raw_auth_header.encode()).decode()
+                headers = {"Authorization": auth_header}
+                params = {"grant_type": "refresh_token",
+                          "refresh_token": fitbit_details.refresh_token,
+                          "expires_in": 300}
+
+                refresh_url = "https://api.fitbit.com/oauth2/token"
+                # Get user access_token and refresh_token
+                refresh_request = requests.post(refresh_url,
+                                                data=params,
+                                                headers=headers)
+
+                # Save new token
+                if refresh_request.status_code == 200:
+                    data = refresh_request.json()
+                    current_timestamp = datetime.timestamp(datetime.now())
+                    expiry_timestamp = current_timestamp + data["expires_in"]
+                    expires_in = datetime.fromtimestamp(expiry_timestamp)
+                    fitbit_user = UserFitBitDetails.objects.get(user_id=data["user_id"])
+                    fitbit_user.access_token = data["access_token"]
+                    fitbit_user.refresh_token = data["access_token"]
+                    fitbit_user.expires_in = expires_in
+                    fitbit_user.enabled_fitbit = True
+                    fitbit_user.save()
 
             self.fitbit_weight_applies = True
             self.fitbit_access_tokens = fitbit_details.access_token + " " + \
                 fitbit_details.refresh_token + " " + fitbit_details.user_id
 
         return {'user': self.request.user,
-                'date': datetime.date.today()}
+                'date': date.today()}
 
     def form_valid(self, form):
         '''
