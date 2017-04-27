@@ -1,3 +1,6 @@
 function prepFitbitWeightApiCall(){
-  alert("preparing weight api")
+  $getFitbitWeightBtn = $("#fitbit-weight-btn")
+  alert($getFitbitWeightBtn.text())
 }
+
+prepFitbitWeightApiCall()

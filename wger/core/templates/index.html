@@ -7,6 +7,9 @@
 {# Header #}
 {#        #}
 {% block header %}
+{% if has_fitbit %}
+<script src="{% static 'js/fitbit_weight.js' %}"></script>
+{% endif %}
 <script src="{% static 'js/weight.js' %}"></script>
 {% endblock %}
 
@@ -14,7 +17,6 @@
 
 {% block content %}
 {% if has_fitbit %}
-    <script src="{% static 'js/fitbit_weight.js' %}"></script>
 {% else %}
 <div class="">
     <a href="{{ fitbit_auth_url }}"><button class="btn btn-success">Sync with Fitbit</button></a>

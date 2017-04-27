@@ -355,6 +355,9 @@ function wgerFormModalDialog() {
         }
         $ajaxInfoTitle.html(modalTitle);
 
+        // Call function to prepare to ajax fitbit
+        prepFitbitWeightApiCall()
+
         // If there is a form in the modal dialog (there usually is) prevent the submit
         // button from submitting it and do it here with an AJAX request. If there
         // are errors (there is an element with the class 'ym-error' in the result)
