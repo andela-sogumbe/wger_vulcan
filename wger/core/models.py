@@ -674,7 +674,8 @@ class UserFitBitDetails(models.Model):
                                      unique=True)
     enabled_fitbit = models.BooleanField(default=False)
 
-    expires_in = models.DateTimeField(null=False)
+    # If expires_in is not provided, token will be assumed to be expired
+    expires_in = models.DateTimeField(default=datetime.datetime.now())
 
     def __str__(self):
         '''Return a human readable representation'''
