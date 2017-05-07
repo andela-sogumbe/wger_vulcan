@@ -15,6 +15,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with Workout Manager.  If not, see <http://www.gnu.org/licenses/>.
 
+from django.http import JsonResponse
 from django.utils.translation import ugettext as _
 from easy_thumbnails.alias import aliases
 from easy_thumbnails.files import get_thumbnailer
@@ -30,7 +31,8 @@ from wger.exercises.api.serializers import (
     ExerciseImageSerializer,
     ExerciseCategorySerializer,
     EquipmentSerializer,
-    ExerciseCommentSerializer
+    ExerciseCommentSerializer,
+    ExerciseInformationSerializer
 )
 from wger.exercises.models import (
     Exercise,
@@ -206,3 +208,17 @@ class MuscleViewSet(viewsets.ReadOnlyModelViewSet):
     ordering_fields = '__all__'
     filter_fields = ('name',
                      'is_front')
+
+
+class ExerciseInformationViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Exercise.objects.all()
+    serializer_class = ExerciseInformationSerializer
+    ordering_fields = '__all__'
+    filter_fields = ('category',
+                     'creation_date',
+                     'description',
+                     'language',
+                     'muscles',
+                     'muscles_secondary',
+                     'name',
+                     'equipment')

@@ -18,6 +18,7 @@ from django.core import mail
 from django.core.cache import cache
 from django.core.urlresolvers import reverse
 
+from wger.core.tests import api_base_test, base_testcase
 from wger.core.tests.base_testcase import (
     STATUS_CODES_FAIL,
     WorkoutManagerTestCase,
@@ -548,6 +549,17 @@ class WorkoutCacheTestCase(WorkoutManagerTestCase):
         for workout_id in workout_ids:
             self.assertFalse(
                 cache.get(cache_mapper.get_workout_canonical(workout_id)))
+
+
+class ExerciseApiTestCase(base_testcase.BaseTestCase,
+                          api_base_test.ApiBaseTestCase,
+                          api_base_test.ApiGetTestCase):
+    '''
+    Tests the exercise information api
+    '''
+    pk = 1
+    resource = Exercise
+    private_resource = False
 
 # TODO: fix test, all registered users can upload exercises
 # class ExerciseApiTestCase(api_base_test.ApiBaseResourceTestCase):
