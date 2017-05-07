@@ -44,6 +44,9 @@ INSTALLED_APPS = (
     # Uncomment the next line to enable the admin:
     'django.contrib.admin',
 
+    # Social Auth
+    'social_django',
+
     # Apps from wger proper
     'wger.core',
     'wger.manager',
@@ -123,12 +126,32 @@ MIDDLEWARE_CLASSES = (
     # Django mobile
     'django_mobile.middleware.MobileDetectionMiddleware',
     'django_mobile.middleware.SetFlavourMiddleware',
+
+    # Social Login
+    'social_django.middleware.SocialAuthExceptionMiddleware',
 )
 
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
-    'wger.utils.helpers.EmailAuthBackend'
+    'wger.utils.helpers.EmailAuthBackend',
+    'social_core.backends.google.GoogleOAuth2',
+    'social_core.backends.twitter.TwitterOAuth',
+    'social_core.backends.facebook.FacebookOAuth2',
+
 )
+
+# Google Authentication
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '957899058036-qh6cbl2fn6l10e27bbg3dh3vc2o2ulmm.apps.googleusercontent.com'
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'XJjXPc0XAbTqWeLvEdaeNIml'
+
+# Twitter Authentication
+SOCIAL_AUTH_TWITTER_KEY = 'nk09HIRVtqnDKbhefD9Z4y6GR'
+SOCIAL_AUTH_TWITTER_SECRET = '2W7GTFKd644OvpK1M2hMqvT4IG3HcYiNGpqzWHnys4bAfYh6h7'
+
+# Facebook Authentication
+SOCIAL_AUTH_FACEBOOK_KEY = '1343519385685769'
+SOCIAL_AUTH_FACEBOOK_SECRET = 'fe9689e3f8117439c0fae6d5a6d6f402'
+SOCIAL_AUTH_FACEBOOK_SCOPE = ['email']
 
 TEMPLATES = [
     {
@@ -137,6 +160,8 @@ TEMPLATES = [
         'OPTIONS': {
             'context_processors': [
                 'wger.utils.context_processor.processor',
+                'social_django.context_processors.backends',
+                'social_django.context_processors.login_redirect',
 
                 # Django
                 'django.contrib.auth.context_processors.auth',
@@ -186,6 +211,9 @@ EMAIL_SUBJECT_PREFIX = '[wger] '
 # Login
 LOGIN_URL = '/user/login'
 LOGIN_REDIRECT_URL = '/'
+
+SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/'
+SOCIAL_AUTH_LOGIN_URL = '/'
 
 # Internationalization
 USE_TZ = True
@@ -335,3 +363,16 @@ WGER_SETTINGS = {
     'EMAIL_FROM': 'wger Workout Manager <wger@example.com>',
     'TWITTER': False
 }
+
+SOCIAL_AUTH_URL_NAMESPACE = 'social'
+SOCIAL_AUTH_PIPELINE = (
+    'social_core.pipeline.social_auth.social_details',
+    'social_core.pipeline.social_auth.social_uid',
+    'social_core.pipeline.social_auth.social_user',
+    'social_core.pipeline.user.get_username',
+    'social_core.pipeline.user.create_user',
+    'social_core.pipeline.social_auth.associate_user',
+    'social_core.pipeline.social_auth.load_extra_data',
+    'social_core.pipeline.user.user_details',
+    'social_core.pipeline.social_auth.associate_by_email',
+)
