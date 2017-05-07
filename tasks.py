@@ -285,6 +285,107 @@ def config_location(context):
     print('* database path: {0}'.format(get_user_data_path('wger', 'database.sqlite')))
 
 
+@task(help={'username': 'Username of user to grant permission to use user rest API',
+            'id': 'Id of user to grant permission to use user rest API',
+            'settings_path': 'Path to settings file (absolute path recommended).  Leave empty for default'})
+def add_user_rest_api(context, username=None, id=None, settings_path=None):
+    '''
+    Gives a user permission to create users via the user api endpoint
+    '''
+    # Username or id must be given
+    if not username and not id:
+        print('Please provide the username or id of the user you want'
+              'to grant permission to')
+        return
+
+    # Find the path to the settings and setup the django environment
+    setup_django_environment(settings_path)
+    from wger.core.models import User, UserMetadata
+
+    # Ensure user exists
+    try:
+        if username:
+            user = User.objects.get(username=username)
+        else:
+            user = User.objects.get(id=id)
+    except User.DoesNotExist:
+        print('User does not exist')
+    except ValueError:
+        print('User does not exist')
+        return
+
+    # Grant user permission to create users
+    try:
+        user_metadata = UserMetadata.objects.get(user=user.id)
+        user_metadata.can_create_users = True
+        user_metadata.save()
+    except UserMetadata.DoesNotExist:
+        # add him/her
+        user_metadata = UserMetadata(user=user.id, can_create_users=True)
+        user_metadata.save()
+
+    print('{} can now add users via the API'.format(user.username))
+
+
+@task(help={'username': 'Username of user to remove permission to use user rest API',
+            'id': 'Id of user to remove permission to use user rest API',
+            'settings_path': 'Path to settings file (absolute path recommended).  Leave empty for default'})
+def remove_user_rest_api(context, username=None, id=None, settings_path=None):
+    '''
+    Gives a user permission to create users via the user api endpoint
+    '''
+    # Username or id must be given
+    if not username and not id:
+        print('Please provide the username or id of the user you want'
+              'to remove permission from')
+        return
+
+    # Find the path to the settings and setup the django environment
+    setup_django_environment(settings_path)
+    from wger.core.models import User, UserMetadata
+
+    # Ensure user exists
+    try:
+        if username:
+            user = User.objects.get(username=username)
+        else:
+            user = User.objects.get(id=id)
+    except User.DoesNotExist:
+        print('User does not exist')
+    except ValueError:
+        print('User does not exist')
+        return
+
+    # Grant user permission to create users
+    try:
+        user_metadata = UserMetadata.objects.get(user=user.id)
+        user_metadata.can_create_users = False
+        user_metadata.save()
+    except UserMetadata.DoesNotExist:
+        # add him/her
+        user_metadata = UserMetadata(user=user.id, can_create_users=False)
+        user_metadata.save()
+
+    print('{} cannot add users via the API'.format(user.username))
+
+
+@task(help={'settings_path': 'Path to settings file (absolute path recommended). Leave empty for default'})
+def list_user_rest_api(context, settings_path=None):
+    # Find the path to the settings and setup the django environment
+    setup_django_environment(settings_path)
+
+    from wger.core.models import User, UserMetadata
+
+    # Retreive all users who can add users via API
+    users_api_users = UserMetadata.objects.filter(can_create_users=True)
+
+    print("Username ---> Id")
+    for user in users_api_users:
+        username = User.objects.get(id=user.user).username
+        print(username, " ---> ", user.user)
+
+
+
 #
 #
 # Helper functions

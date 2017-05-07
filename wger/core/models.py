@@ -647,3 +647,16 @@ class WeightUnit(models.Model):
         This is done basically to not litter the code with magic IDs
         '''
         return self.id in (1, 2)
+
+
+@python_2_unicode_compatible
+class UserMetadata(models.Model):
+    user = models.IntegerField(editable=False)
+    created_by = models.ForeignKey(User,
+                                   editable=False,
+                                   null=True)
+    can_create_users = models.BooleanField(editable=True,
+                                           default=False)
+
+    def __str__(self):
+        return str(self.user)

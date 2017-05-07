@@ -19,6 +19,7 @@ from django.contrib.auth.models import User
 from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework.decorators import detail_route
+from rest_framework.throttling import UserRateThrottle
 
 from wger.core.models import (
     UserProfile,
@@ -26,17 +27,23 @@ from wger.core.models import (
     DaysOfWeek,
     License,
     RepetitionUnit,
-    WeightUnit)
+    WeightUnit,
+    UserMetadata)
 from wger.core.api.serializers import (
     UsernameSerializer,
     LanguageSerializer,
     DaysOfWeekSerializer,
     LicenseSerializer,
     RepetitionUnitSerializer,
-    WeightUnitSerializer
+    WeightUnitSerializer,
+    UserSerializer
 )
 from wger.core.api.serializers import UserprofileSerializer
-from wger.utils.permissions import UpdateOnlyPermission, WgerPermission
+from wger.utils.helpers import password_generator
+from wger.utils.permissions import (
+    UpdateOnlyPermission,
+    WgerPermission,
+    CreateOnlyPermission)
 
 
 class UserProfileViewSet(viewsets.ModelViewSet):
@@ -121,3 +128,63 @@ class WeightUnitViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = WeightUnitSerializer
     ordering_fields = '__all__'
     filter_fields = ('name', )
+
+
+class UserViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint for user objects
+    """
+    is_private = True
+    permission_classes = (WgerPermission, CreateOnlyPermission, )
+    serializer_class = UserSerializer
+    http_method_names = ["post"]
+    throttle_scope = "create_users"
+
+    def get_owner_objects(self):
+        """
+        Return objects to check for ownership permission
+        """
+        return [(User, 'user')]
+
+    def get_queryset(self):
+        """
+        Return the authenticated user
+        """
+        return User.objects.get(username=self.request.user)
+
+    def create(self, request, *args, **kwargs):
+        """
+        Create a user from the request
+        """
+        # Check if has necessary permission for API
+        try:
+            request_user_metadata = UserMetadata.objects.get(user=self.get_queryset().id)
+            can_create_users = request_user_metadata.can_create_users
+        except UserMetadata.DoesNotExist:
+            can_create_users = False
+
+        if not can_create_users:
+            detail = {"detail": "You do not have permission to use this API endpoint"}
+            return Response(detail, status=403)
+
+        data = request.data
+
+        # Generate password for user if password was not put
+        if not data["password"]:
+            password = password_generator()
+            data["password"] = password
+        password = data["password"]
+
+        serializer = UserSerializer(data=data)
+
+        if serializer.is_valid():
+            serializer.save()
+            data = serializer.data
+
+            # Save created user to usermetadata
+            metadata = UserMetadata(user=data["id"],
+                                    created_by=self.get_queryset())
+            metadata.save()
+            data["password"] = password
+            return Response(data, status=201)
+        return Response(serializer.errors, status=400)
