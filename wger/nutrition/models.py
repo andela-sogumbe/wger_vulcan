@@ -29,9 +29,12 @@ from django.core.cache import cache
 from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
 from django.utils.encoding import python_2_unicode_compatible
+from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
 from django.utils import translation
 from django.conf import settings
+from django.dispatch import receiver
+from django.db.models.signals import post_save, post_delete
 
 from wger.core.models import Language
 from wger.utils.constants import TWOPLACES
@@ -631,6 +634,7 @@ class MealItem(models.Model):
                             'fat_saturated': 0,
                             'fibres': 0,
                             'sodium': 0}
+
         # Calculate the base weight of the item
         if self.get_unit_type() == MEALITEM_WEIGHT_GRAM:
             item_weight = self.amount
@@ -674,3 +678,17 @@ class MealItem(models.Model):
             nutritional_info[i] = Decimal(nutritional_info[i]).quantize(TWOPLACES)
 
         return nutritional_info
+
+
+@receiver(post_save, sender=NutritionPlan)
+@receiver(post_delete, sender=NutritionPlan)
+@receiver(post_save, sender=Meal)
+@receiver(post_delete, sender=Meal)
+@receiver(post_save, sender=MealItem)
+@receiver(post_delete, sender=MealItem)
+def cache_nutrition_info(sender, **kwargs):
+    nutritional_info = sender.get_nutritional_values()
+
+    cache_nutritional_info = cache.get('cached_nutrition_info')
+    if not cache_nutritional_info:
+        cache.set('cached_nutritional_info', nutritional_info)
